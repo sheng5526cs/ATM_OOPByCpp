@@ -1,7 +1,7 @@
 #ifndef LOGINWINDOW_H // 防止頭文件重複包含
 #define LOGINWINDOW_H
 
-#include"user_info.h"
+
 #include <QMainWindow> // 引入 QMainWindow 基類，提供主視窗功能
 
 QT_BEGIN_NAMESPACE
@@ -14,13 +14,19 @@ class loginWindow : public QMainWindow { // 定義 loginWindow 類，繼承 QMai
 public:
     loginWindow(QWidget *parent = nullptr); // 建構函數，接受父物件指標，預設為空
     ~loginWindow(); // 解構函數，清理資源
+    void clearPassword();  // 宣告清除
+
 
 private slots:
     void on_LoginButton_clicked(); // 私有槽函數，處理 LoginButton 的 clicked 信號
 
 private:
     Ui::loginWindow *ui; // 指向 UI 物件的指標，用於訪問 loginwindow.ui 的元件
-    UserInfo Currentuser;
+
+signals:
+    void loginSuccess(const QString &account, const QString &password);  // 新增這個版本
+
+
 };
 
 #endif // LOGINWINDOW_H // 結束頭文件保護

@@ -1,4 +1,4 @@
-#include "loginwindow.h" // 引入登入視窗頭文件
+#include "controller.h" // 引入登入視窗頭文件
 #include <QApplication> // 引入 Qt 應用程式類
 #include <QTranslator> // 引入翻譯器類
 #include <QLocale> // 引入地區設定類
@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) // 主函數，程式入口
         qDebug() << "Failed to open QSS file."; // 除錯輸出：樣式載入失敗
     }
 
-    loginWindow w; // 創建登入視窗物件
-    w.show(); // 顯示登入視窗
-    return a.exec(); // 進入事件循環，等待用戶操作
+    Controller controller;   // ✅ 使用 Controller 建立流程
+    controller.start();      // ✅ 從 loginWindow 開始顯示
+    return a.exec();
 }

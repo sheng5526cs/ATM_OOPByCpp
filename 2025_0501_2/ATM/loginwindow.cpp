@@ -1,6 +1,6 @@
 #include "loginwindow.h" // 引入 loginWindow 頭文件
 #include "ui_loginwindow.h" // 引入 UI 類
-#include "user_info.h"
+#include "controller.h"
 #include <QMessageBox> // 引入訊息框類
 
 loginWindow::loginWindow(QWidget *parent) // 建構函數
@@ -15,7 +15,9 @@ loginWindow::~loginWindow() // 解構函數
 {
     delete ui; // 釋放 UI 物件
 }
-
+void loginWindow::clearPassword(){
+    ui->PasswordEdit->clear(); // 清空密碼欄
+}
 void loginWindow::on_LoginButton_clicked() // 處理登入按鈕點擊
 {
     QString account = ui->AccountEdit->text(); // 獲取帳號輸入
@@ -34,17 +36,19 @@ void loginWindow::on_LoginButton_clicked() // 處理登入按鈕點擊
     }
 
     // 硬編碼驗證
-    bool loginSuccess = false; // 記錄驗證結果
+    bool LoginSuccess = false; // 記錄驗證結果
     if (isAdmin) { // 管理員模式
-        loginSuccess = (account == "admin" && password == "admin123"); // 驗證 admin/admin123
+        LoginSuccess = (account == "admin" && password == "admin123"); // 驗證 admin/admin123
     } else { // 用戶模式
-        loginSuccess = (account == "user" && password == "1234"); // 驗證 user/1234
+        LoginSuccess = (account == "user" && password == "1234"); // 驗證 user/1234
     }
 
     // 處理驗證結果
-    if (loginSuccess) {
-        Currentuser.setAccount(account);
-        Currentuser.setBalance(12345678);
+    if (LoginSuccess) {
+        qDebug() << "Login successful! Account:" << account << "Password:" << password;
+        emit loginSuccess(account, password);  // 發送帳戶資訊與密碼
+
+
     } else {
         QMessageBox msgBox(this); // 創建訊息框
         msgBox.setWindowTitle("Error"); // 設定標題
