@@ -1,0 +1,27 @@
+/* test.qss */
+QWidget {
+    background-color: #f0f0f0;
+}
+
+QLabel {
+    font: 13pt "Microsoft YaHei UI";
+    color: #222222;
+}
+
+QPushButton {
+    font: 13pt "Microsoft YaHei UI";
+    border: 3px solid black;
+    border-radius: 10px;
+    background-color: #dcdcdc;
+    color: #111111;
+    padding: 6px;
+}
+
+QLineEdit {
+    font: 12pt "Microsoft YaHei UI";
+    border: 2px solid #888888;
+    border-radius: 6px;
+    padding: 4px;
+    background-color: #f9f9f9;
+    color: #111111;
+}
