@@ -131,6 +131,18 @@ Controller::Controller(QObject *parent)
         adminwin->hide();          // 隱藏管理員視窗
         acclist->show();          // 顯示登入視窗
     });
+
+
+    connect(acclist, &acclistWinow::logout, this, [=](){
+        acclist->hide();          // 隱藏管理員視窗
+        loginWin->clearPassword(); // 清除密碼欄位
+        loginWin->show();           // 顯示登入視窗
+    });
+
+    connect(acclist, &acclistWinow::back, this, [=](){
+        acclist->hide();           // 隱藏管理員視窗
+        adminwin->show();          // 顯示登入視窗
+    });
 }
 
 // 設定靜態帳號變數

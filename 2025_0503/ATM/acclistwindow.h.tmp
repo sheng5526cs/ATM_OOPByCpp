@@ -1,0 +1,22 @@
+#ifndef ACCLISTWINDOW_H
+#define ACCLISTWINDOW_H
+
+#include <QMainWindow>
+
+namespace Ui {
+class acclistWinow;
+}
+
+class acclistWinow : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    explicit acclistWinow(QWidget *parent = nullptr);
+    ~acclistWinow();
+
+private:
+    Ui::acclistWinow *ui;
+};
+
+#endif // ACCLISTWINDOW_H
