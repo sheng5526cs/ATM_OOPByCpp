@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>adminwindow</class>
+ <widget class="QMainWindow" name="adminwindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1280</width>
+    <height>680</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"> background-color: rgb(62, 62, 62);</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true"> background-color: rgb(62, 62, 62);</string>
+   </property>
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>100</y>
+      <width>971</width>
+      <height>551</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="6" column="0">
+      <widget class="QPushButton" name="aOtherBotton">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>50</height>
+        </size>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    font: 13pt &quot;Microsoft YaHei UI&quot;;
+    border: 3px solid black;
+    border-radius: 10px;
+    background-color: #dcdcdc;
+    color: #111111;
+    padding: 6px 12px;
+}
+</string>
+       </property>
+       <property name="text">
+        <string>其他功能</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QPushButton" name="ChangestatusButton">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>50</height>
+        </size>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    font: 13pt &quot;Microsoft YaHei UI&quot;;
+    border: 3px solid black;
+    border-radius: 10px;
+    background-color: #dcdcdc;
+    color: #111111;
+    padding: 6px 12px;
+}
+</string>
+       </property>
+       <property name="text">
+        <string>更改用戶狀態</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QPushButton" name="ResetpasswordButton">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>50</height>
+        </size>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    font: 13pt &quot;Microsoft YaHei UI&quot;;
+    border: 3px solid black;
+    border-radius: 10px;
+    background-color: #dcdcdc;
+    color: #111111;
+    padding: 6px 12px;
+}
+</string>
+       </property>
+       <property name="text">
+        <string>重設用戶密碼</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QPushButton" name="AccountlistButton">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>50</height>
+        </size>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    font: 13pt &quot;Microsoft YaHei UI&quot;;
+    border: 3px solid black;
+    border-radius: 10px;
+    background-color: #dcdcdc;
+    color: #111111;
+    padding: 6px 12px;
+}
+</string>
+       </property>
+       <property name="text">
+        <string>帳戶列表</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QPushButton" name="logout">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>50</height>
+        </size>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    font: 13pt &quot;Microsoft YaHei UI&quot;;
+    border: 3px solid black;
+    border-radius: 10px;
+    background-color: #dcdcdc;
+    color: #111111;
+    padding: 6px 12px;
+}
+</string>
+       </property>
+       <property name="text">
+        <string>回到登入頁</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QPushButton" name="AddAccountButton">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>50</height>
+        </size>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    font: 13pt &quot;Microsoft YaHei UI&quot;;
+    border: 3px solid black;
+    border-radius: 10px;
+    background-color: #dcdcdc;
+    color: #111111;
+    padding: 6px 12px;
+}
+</string>
+       </property>
+       <property name="text">
+        <string>新增帳戶</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1291</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>25</pointsize>
+      <italic>false</italic>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>ForbiddenCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+    background-color:rgb(255, 48, 51);  /* 黑色背景 */
+    color: black;             /* 白色文字 */
+    font: bold;               /* 粗體字 */
+}
+</string>
+    </property>
+    <property name="text">
+     <string>目 前 狀 態    :      管 理 員 模 式</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1280</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
