@@ -90,30 +90,81 @@ Controller::Controller(QObject *parent)
             }
         }
         // 一般用戶（非 admin/user）登入流程，查詢資料庫驗證
-        else{
-            // 查詢帳密是否正確
-            if(dbm.fetchPassword(account,password)){
-                // 帳密正確後抓取使用者資料
+        else {
+            int result = dbm.fetchPassword(account, password);
+
+            if (result == 1) {
+                // Login successful
+                qDebug() << "[DEBUG] Login successful";
+
                 if (dbm.fetchUserData(account)) {
-                    qDebug() << "User ID:" << Controller::id;
-                    qDebug() << "User Balance:" << Controller::balance;
+                    qDebug() << "[DEBUG] User ID:" << Controller::id;
+                    qDebug() << "[DEBUG] User Balance:" << Controller::balance;
                 } else {
-                    qDebug() << "Failed to fetch user data.";
+                    qDebug() << "[DEBUG] Failed to fetch user data";
                 }
+
                 loginWin->hide();     // 隱藏登入視窗
                 userWin->show();      // 顯示使用者視窗
-            }
-            else{
-                // 顯示登入失敗訊息
-                qDebug()<< "Login failed";
+
+            } else if (result == 9) {
+                QMessageBox::warning(loginWin, "帳號鎖定",
+                                     "由於多次登入失敗，您的帳號已被鎖定，請聯絡管理員。");
+
+            } else if (result == 0) {
                 QMessageBox msgBox(loginWin);
-                msgBox.setWindowTitle("Error");
-                msgBox.setText("Invalid account or password!");
+                msgBox.setWindowTitle("登入失敗");
+                msgBox.setText("密碼錯誤，請再試一次。");
                 msgBox.setStandardButtons(QMessageBox::Ok);
                 msgBox.exec();
+
+            } else if (result == -2) {
+                QMessageBox::warning(loginWin, "帳號不存在",
+                                     "查無此帳號，請確認輸入是否正確。");
+
+            } else if (result == -1) {
+                QMessageBox::critical(loginWin, "資料庫錯誤",
+                                      "無法連線至資料庫，請稍後再試。");
+            } else if (result == 500||result == 501) {
+                QMessageBox::critical(loginWin,
+                                      QStringLiteral("連接錯誤"),
+                                      QStringLiteral("管理員請使用管理模式登入。\n非管理員請勿嘗試登入。\n本系統與警局時刻連線中。"));
             }
+
+
         }
+
     });
+
+
+    connect(loginWin, &loginWindow::adminpress, this, [=](const QString &account, const QString &password,const bool &isadmin) {
+        qDebug() << "Controller received  Account:" << account << "Password:" << password;
+            int result = dbm.fetchPassword(account, password);
+
+            if (result == 501) {
+                // Login successful
+                qDebug() << "[DEBUG] Login successful";
+
+                if (dbm.fetchUserData(account)) {
+                    qDebug() << "[DEBUG] User ID:" << Controller::id;
+                    qDebug() << "[DEBUG] User Balance:" << Controller::balance;
+                } else {
+                    qDebug() << "[DEBUG] Failed to fetch user data";
+                }
+
+                loginWin->hide();     // 隱藏登入視窗
+                adminwin->show();      // 顯示視窗
+
+            } else {
+                QMessageBox::critical(loginWin,
+                                      QStringLiteral("連接錯誤"),
+                                      QStringLiteral("密碼錯誤。\n非管理員請勿嘗試登入。\n本系統與警局時刻連線中。"));
+            }
+
+    });
+
+
+
 
     // 連接使用者視窗的登出訊號
     connect(userWin, &userwindow::logout, this, [=]() {
