@@ -1,0 +1,119 @@
+@startuml
+' ===== 類別定義 =====
+class Controller {
+    - loginWin: loginWindow
+    - userWin: userwindow
+    - adminwin: adminwindow
+    - acclist: acclistWindow
+    - addacc: addaccwindow
+    - spw: setpasswordwindow
+    - ssw: setstatuswindow
+    - dbm: DatabaseManager
+    - static id: QString
+    - static account: QString
+    - static balance: double
+    + start()
+    + Getid(): QString
+    + Getaccount(): QString
+    + Getbalance(): double
+    + Setid(id: QString)
+    + Setaccount(account: QString)
+    + Setbalance(balance: double)
+}
+
+class DatabaseManager {
+    - db: QSqlDatabase
+    + connect(): bool
+    + createUSERTable()
+    + insertTestUserData()
+    + fetchUserData(account: QString): bool
+    + fetchPassword(account: QString, password: QString): int
+    + status(account: QString, index: int)
+}
+
+class loginWindow {
+    - ui: Ui::loginWindow
+    + clearPassword()
+    --
+    + loginPress(account, password, admin)
+    + adminpress(account, password, admin)
+}
+
+class userwindow {
+    - ui: Ui::userwindow
+    --
+    + logout()
+}
+
+class adminwindow {
+    - ui: Ui::adminwindow
+    --
+    + logout()
+    + Accountlist()
+    + addaccountwindow()
+    + passwordsetting()
+    + statuschange()
+}
+
+class acclistWindow {
+    - ui: Ui::acclistWinow
+    - model: QSqlTableModel
+    + loadAccounts()
+    + refresh()
+    --
+    + back()
+    + logout()
+}
+
+class addaccwindow {
+    - ui: Ui::addaccwindow
+    --
+    + back()
+    + logout()
+}
+
+class setpasswordwindow {
+    - ui: Ui::setpasswordwindow
+    --
+    + back()
+    + logout()
+}
+
+class setstatuswindow {
+    - ui: Ui::setstatuswindow
+    --
+    + back()
+    + logout()
+}
+
+class users << (T,#FFAAAA) >> {
+    id: INTEGER
+    account: TEXT
+    password: TEXT
+    status: INTEGER
+    balance: REAL
+    change_amount_1~5
+    balance_1~5
+    change_time_1~5
+}
+
+' ===== 關聯 =====
+Controller <--> loginWindow
+Controller <--> userwindow
+Controller <--> adminwindow
+Controller <--> acclistWindow
+Controller <--> addaccwindow
+Controller <--> setpasswordwindow
+Controller <--> setstatuswindow
+Controller --> DatabaseManager
+
+
+
+acclistWindow --> DatabaseManager
+addaccwindow --> DatabaseManager
+setpasswordwindow --> DatabaseManager
+setstatuswindow --> DatabaseManager
+
+DatabaseManager --> users
+
+@enduml
