@@ -1,0 +1,621 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>withdrowWindow</class>
+ <widget class="QMainWindow" name="withdrowWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1280</width>
+    <height>680</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>提款</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow {
+    background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 1,
+                                 stop: 0 #add8e6, stop: 1 #7bb3d9);
+}
+</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">QWidget {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #c3e2f0, stop: 1 #87ceeb);
+    font-family: &quot;Microsoft YaHei UI&quot;;
+    color: #212529;
+}
+QWidget[class=&quot;QWidget&quot;] {
+    background: transparent;
+}
+</string>
+   </property>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>20</y>
+      <width>870</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>ForbiddenCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+    font: bold 24pt &quot;Microsoft YaHei UI&quot;;
+    color: #ffffff;
+    background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+                                 stop: 0 #667eea, stop: 1 #764ba2);
+    border-radius: 12px;
+    padding: 15px;
+    margin: 5px;
+}
+</string>
+    </property>
+    <property name="text">
+     <string>歡 迎 使 用 提 款 功 能</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>960</x>
+      <y>30</y>
+      <width>251</width>
+      <height>90</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>0</width>
+      <height>0</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>16777215</width>
+      <height>100</height>
+     </size>
+    </property>
+    <property name="cursor">
+     <cursorShape>ForbiddenCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+    font: bold 18pt &quot;Microsoft YaHei UI&quot;;
+    color: #495057;
+    background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 1,
+                                 stop: 0 #ffbf00, stop: 1 #ffecb3);
+    border-radius: 12px;
+    padding: 10px;
+}
+</string>
+    </property>
+    <property name="text">
+     <string>快速提款</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>230</y>
+      <width>521</width>
+      <height>80</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="cursor">
+        <cursorShape>ForbiddenCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel {
+    font: bold 16pt &quot;Microsoft YaHei UI&quot;;
+    color: #495057;
+    background-color: transparent;
+}
+</string>
+       </property>
+       <property name="text">
+        <string>請 輸 入 提 款 金 額  :</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Policy::Preferred</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>15</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="withdrow">
+       <property name="styleSheet">
+        <string notr="true">QLineEdit {
+    font: 14pt &quot;Microsoft YaHei UI&quot;;
+    background-color: #ffffff;
+    border: 2px solid #ced4da;
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: #495057;
+}
+QLineEdit:focus {
+    border: 2px solid #007bff;
+    background-color: #f8f9fa;
+}
+QLineEdit:disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+    border: 2px solid #dee2e6;
+}
+</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>360</y>
+      <width>341</width>
+      <height>80</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QPushButton" name="clear">
+       <property name="minimumSize">
+        <size>
+         <width>125</width>
+         <height>48</height>
+        </size>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    font: bold 14pt &quot;Microsoft YaHei UI&quot;;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #ffffff, stop: 1 #f8f9fa);
+    border: 2px solid #007bff;
+    border-radius: 12px;
+    color: #007bff;
+    padding: 12px 20px;
+    min-height: 20px;
+}
+QPushButton:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #007bff, stop: 1 #0056b3);
+    color: white;
+    border: 2px solid #0056b3;
+}
+QPushButton:pressed {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #0056b3, stop: 1 #004085);
+}
+QPushButton:disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+    border: 2px solid #dee2e6;
+}
+</string>
+       </property>
+       <property name="text">
+        <string>清空</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="withdraw">
+       <property name="minimumSize">
+        <size>
+         <width>125</width>
+         <height>48</height>
+        </size>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    font: bold 14pt &quot;Microsoft YaHei UI&quot;;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #ffffff, stop: 1 #f8f9fa);
+    border: 2px solid #007bff;
+    border-radius: 12px;
+    color: #007bff;
+    padding: 12px 20px;
+    min-height: 20px;
+}
+QPushButton:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #007bff, stop: 1 #0056b3);
+    color: white;
+    border: 2px solid #0056b3;
+}
+QPushButton:pressed {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #0056b3, stop: 1 #004085);
+}
+QPushButton:disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+    border: 2px solid #dee2e6;
+}
+</string>
+       </property>
+       <property name="text">
+        <string>提款</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>1020</x>
+      <y>160</y>
+      <width>160</width>
+      <height>491</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QPushButton" name="f1000">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    font: bold 14pt &quot;Microsoft YaHei UI&quot;;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #ffffff, stop: 1 #f8f9fa);
+    border: 2px solid #007bff;
+    border-radius: 12px;
+    color: #007bff;
+    padding: 12px 20px;
+    min-height: 20px;
+}
+QPushButton:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #007bff, stop: 1 #0056b3);
+    color: white;
+    border: 2px solid #0056b3;
+}
+QPushButton:pressed {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #0056b3, stop: 1 #004085);
+}
+QPushButton:disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+    border: 2px solid #dee2e6;
+}
+</string>
+       </property>
+       <property name="text">
+        <string>1000</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="f2000">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    font: bold 14pt &quot;Microsoft YaHei UI&quot;;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #ffffff, stop: 1 #f8f9fa);
+    border: 2px solid #007bff;
+    border-radius: 12px;
+    color: #007bff;
+    padding: 12px 20px;
+    min-height: 20px;
+}
+QPushButton:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #007bff, stop: 1 #0056b3);
+    color: white;
+    border: 2px solid #0056b3;
+}
+QPushButton:pressed {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #0056b3, stop: 1 #004085);
+}
+QPushButton:disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+    border: 2px solid #dee2e6;
+}
+</string>
+       </property>
+       <property name="text">
+        <string>2000</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="f3000">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    font: bold 14pt &quot;Microsoft YaHei UI&quot;;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #ffffff, stop: 1 #f8f9fa);
+    border: 2px solid #007bff;
+    border-radius: 12px;
+    color: #007bff;
+    padding: 12px 20px;
+    min-height: 20px;
+}
+QPushButton:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #007bff, stop: 1 #0056b3);
+    color: white;
+    border: 2px solid #0056b3;
+}
+QPushButton:pressed {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #0056b3, stop: 1 #004085);
+}
+QPushButton:disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+    border: 2px solid #dee2e6;
+}
+</string>
+       </property>
+       <property name="text">
+        <string>3000</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="f5000">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    font: bold 14pt &quot;Microsoft YaHei UI&quot;;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #ffffff, stop: 1 #f8f9fa);
+    border: 2px solid #007bff;
+    border-radius: 12px;
+    color: #007bff;
+    padding: 12px 20px;
+    min-height: 20px;
+}
+QPushButton:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #007bff, stop: 1 #0056b3);
+    color: white;
+    border: 2px solid #0056b3;
+}
+QPushButton:pressed {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #0056b3, stop: 1 #004085);
+}
+QPushButton:disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+    border: 2px solid #dee2e6;
+}
+</string>
+       </property>
+       <property name="text">
+        <string>5000</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="f10000">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    font: bold 14pt &quot;Microsoft YaHei UI&quot;;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #ffffff, stop: 1 #f8f9fa);
+    border: 2px solid #007bff;
+    border-radius: 12px;
+    color: #007bff;
+    padding: 12px 20px;
+    min-height: 20px;
+}
+QPushButton:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #007bff, stop: 1 #0056b3);
+    color: white;
+    border: 2px solid #0056b3;
+}
+QPushButton:pressed {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #0056b3, stop: 1 #004085);
+}
+QPushButton:disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+    border: 2px solid #dee2e6;
+}
+</string>
+       </property>
+       <property name="text">
+        <string>10000</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget_3">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>590</y>
+      <width>431</width>
+      <height>80</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QPushButton" name="back">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    font: bold 14pt &quot;Microsoft YaHei UI&quot;;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #ffffff, stop: 1 #f8f9fa);
+    border: 2px solid #007bff;
+    border-radius: 12px;
+    color: #007bff;
+    padding: 12px 20px;
+    min-height: 20px;
+}
+QPushButton:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #007bff, stop: 1 #0056b3);
+    color: white;
+    border: 2px solid #0056b3;
+}
+QPushButton:pressed {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #0056b3, stop: 1 #004085);
+}
+QPushButton:disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+    border: 2px solid #dee2e6;
+}
+</string>
+       </property>
+       <property name="text">
+        <string>上一頁</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Policy::Preferred</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="logout">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">
+QPushButton {
+    font: bold 14pt &quot;Microsoft YaHei UI&quot;;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #ff6b6b, stop: 1 #ee5a52);
+    border: 2px solid #dc3545;
+    color: white;
+    border-radius: 12px;
+    padding: 12px 20px;
+    min-height: 20px;
+}
+QPushButton:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #dc3545, stop: 1 #c82333);
+}
+</string>
+       </property>
+       <property name="text">
+        <string>登出</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>160</y>
+      <width>521</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>WaitCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+    font: bold 14pt &quot;Microsoft YaHei UI&quot;;
+    color: #495057;
+    background: #fffbe6;
+    border-radius: 8px;
+    padding: 6px 12px;
+}
+</string>
+    </property>
+    <property name="text">
+     <string>目前餘額:尚未連接</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

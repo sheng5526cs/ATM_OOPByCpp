@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>userwindow</class>
+ <widget class="QMainWindow" name="userwindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1280</width>
+    <height>720</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>250</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/* 主視窗樣式 - 更深藍漸層 */
+QMainWindow {
+    background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 1,
+                                 stop: 0 #add8e6, stop: 1 #7bb3d9);
+}</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">/* 全局樣式 - 更深藍背景 */
+QWidget {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #c3e2f0, stop: 1 #87ceeb);
+    font-family: &quot;Microsoft YaHei UI&quot;;
+    color: #212529;
+}
+
+/* 讓 layout 容器透明 */
+QWidget[class=&quot;QWidget&quot;] {
+    background: transparent;
+}
+
+/* 通用按鈕樣式 */
+QPushButton {
+    font: bold 16pt &quot;Microsoft YaHei UI&quot;;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #ffffff, stop: 1 #f8f9fa);
+    border: 2px solid #007bff;
+    border-radius: 12px;
+    color: #007bff;
+    padding: 12px 20px;
+}
+
+QPushButton:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #007bff, stop: 1 #0056b3);
+    color: white;
+    border: 2px solid #0056b3;
+}
+
+QPushButton:pressed {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #0056b3, stop: 1 #004085);
+}
+
+QPushButton:disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+    border: 2px solid #dee2e6;
+}
+
+/* 登出按鈕特殊樣式 */
+QPushButton[objectName*=&quot;logout&quot;] {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #ff6b6b, stop: 1 #ee5a52);
+    border: 2px solid #dc3545;
+    color: white;
+}
+
+QPushButton[objectName*=&quot;logout&quot;]:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #dc3545, stop: 1 #c82333);
+}
+
+/* 主功能按鈕特殊樣式 */
+QPushButton[objectName*=&quot;deposit&quot;], QPushButton[objectName*=&quot;withdrow&quot;], 
+QPushButton[objectName*=&quot;trans&quot;], QPushButton[objectName*=&quot;docu&quot;] {
+    font: bold 20pt &quot;Microsoft YaHei UI&quot;;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #28a745, stop: 1 #20c997);
+    border: 3px solid #155724;
+    color: white;
+    border-radius: 15px;
+}
+
+QPushButton[objectName*=&quot;deposit&quot;]:hover, QPushButton[objectName*=&quot;withdrow&quot;]:hover,
+QPushButton[objectName*=&quot;trans&quot;]:hover, QPushButton[objectName*=&quot;docu&quot;]:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #218838, stop: 1 #1e7e34);
+}
+
+/* 變更密碼按鈕特殊樣式 */
+QPushButton[objectName*=&quot;changepass&quot;] {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #ffc107, stop: 1 #e0a800);
+    border: 2px solid #d39e00;
+    color: #212529;
+}
+
+QPushButton[objectName*=&quot;changepass&quot;]:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #e0a800, stop: 1 #d39e00);
+}
+
+/* 聯繫客服按鈕特殊樣式 */
+QPushButton[objectName*=&quot;idk&quot;] {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #17a2b8, stop: 1 #138496);
+    border: 2px solid #117a8b;
+    color: white;
+}
+
+QPushButton[objectName*=&quot;idk&quot;]:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #138496, stop: 1 #117a8b);
+}</string>
+   </property>
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>870</x>
+      <y>130</y>
+      <width>482</width>
+      <height>611</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="1" column="0">
+      <widget class="QPushButton" name="changepass">
+       <property name="minimumSize">
+        <size>
+         <width>270</width>
+         <height>150</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>270</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="text">
+        <string>更　改　密　碼</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QPushButton" name="idk">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>150</height>
+        </size>
+       </property>
+       <property name="cursor">
+        <cursorShape>WhatsThisCursor</cursorShape>
+       </property>
+       <property name="text">
+        <string>聯　繫　客　服</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QPushButton" name="logout">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>150</height>
+        </size>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="text">
+        <string>登　出</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="gridLayoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>-50</x>
+      <y>110</y>
+      <width>1071</width>
+      <height>641</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="2" column="0">
+      <widget class="QPushButton" name="docu">
+       <property name="minimumSize">
+        <size>
+         <width>380</width>
+         <height>250</height>
+        </size>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="text">
+        <string>交　　易　　紀　　錄</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QPushButton" name="trans">
+       <property name="minimumSize">
+        <size>
+         <width>380</width>
+         <height>250</height>
+        </size>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="text">
+        <string>轉　　帳</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QPushButton" name="deposit">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>380</width>
+         <height>250</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>20</pointsize>
+         <italic>false</italic>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="text">
+        <string>存　　款</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="withdrow">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>380</width>
+         <height>250</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>350</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>Microsoft YaHei UI</family>
+         <pointsize>20</pointsize>
+         <italic>false</italic>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="text">
+        <string>提　　款</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>-10</x>
+      <y>-40</y>
+      <width>1341</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+    font: bold 28pt &quot;Microsoft YaHei UI&quot;;
+    color: #ffffff;
+    background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+                                 stop: 0 #667eea, stop: 1 #764ba2);
+    border-radius: 0px;
+    padding: 15px;
+    margin: 0px;
+}</string>
+    </property>
+    <property name="text">
+     <string>登　　　入　　　成　　　功　　　！</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>60</y>
+      <width>1311</width>
+      <height>71</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

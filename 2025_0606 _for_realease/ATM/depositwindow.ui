@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>depositWindow</class>
+ <widget class="QMainWindow" name="depositWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1280</width>
+    <height>680</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>存款</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow {
+    background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 1,
+                                 stop: 0 #add8e6, stop: 1 #7bb3d9);
+}
+</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">QWidget {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #c3e2f0, stop: 1 #87ceeb);
+    font-family: &quot;Microsoft YaHei UI&quot;;
+    color: #212529;
+}
+QWidget[class=&quot;QWidget&quot;] {
+    background: transparent;
+}
+</string>
+   </property>
+   <widget class="QLabel" name="label_title">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>30</y>
+      <width>870</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>ForbiddenCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+    font: bold 24pt &quot;Microsoft YaHei UI&quot;;
+    color: #ffffff;
+    background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+                                 stop: 0 #667eea, stop: 1 #764ba2);
+    border-radius: 12px;
+    padding: 15px;
+    margin: 5px;
+}
+</string>
+    </property>
+    <property name="text">
+     <string>歡 迎 使 用 存 款 功 能</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_balance">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>200</y>
+      <width>521</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>ForbiddenCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+    font: bold 14pt &quot;Microsoft YaHei UI&quot;;
+    color: #495057;
+    background: #fffbe6;
+    border-radius: 8px;
+    padding: 6px 12px;
+}
+</string>
+    </property>
+    <property name="text">
+     <string>目前餘額:尚未連接</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>260</y>
+      <width>521</width>
+      <height>80</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label_input">
+       <property name="cursor">
+        <cursorShape>ForbiddenCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel {
+    font: bold 16pt &quot;Microsoft YaHei UI&quot;;
+    color: #495057;
+    background-color: transparent;
+}
+</string>
+       </property>
+       <property name="text">
+        <string>請 放 入 存 款 貨 幣  :</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Policy::Preferred</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>15</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="deposit">
+       <property name="styleSheet">
+        <string notr="true">QLineEdit {
+    font: 14pt &quot;Microsoft YaHei UI&quot;;
+    background-color: #ffffff;
+    border: 2px solid #ced4da;
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: #495057;
+}
+QLineEdit:focus {
+    border: 2px solid #007bff;
+    background-color: #f8f9fa;
+}
+QLineEdit:disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+    border: 2px solid #dee2e6;
+}
+</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>370</y>
+      <width>341</width>
+      <height>80</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QPushButton" name="clear">
+       <property name="minimumSize">
+        <size>
+         <width>125</width>
+         <height>48</height>
+        </size>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    font: bold 14pt &quot;Microsoft YaHei UI&quot;;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #ffffff, stop: 1 #f8f9fa);
+    border: 2px solid #007bff;
+    border-radius: 12px;
+    color: #007bff;
+    padding: 12px 20px;
+    min-height: 20px;
+}
+QPushButton:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #007bff, stop: 1 #0056b3);
+    color: white;
+    border: 2px solid #0056b3;
+}
+QPushButton:pressed {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #0056b3, stop: 1 #004085);
+}
+QPushButton:disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+    border: 2px solid #dee2e6;
+}
+</string>
+       </property>
+       <property name="text">
+        <string>清空</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="deposit_btn">
+       <property name="minimumSize">
+        <size>
+         <width>125</width>
+         <height>48</height>
+        </size>
+       </property>
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    font: bold 14pt &quot;Microsoft YaHei UI&quot;;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #ffffff, stop: 1 #f8f9fa);
+    border: 2px solid #007bff;
+    border-radius: 12px;
+    color: #007bff;
+    padding: 12px 20px;
+    min-height: 20px;
+}
+QPushButton:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #007bff, stop: 1 #0056b3);
+    color: white;
+    border: 2px solid #0056b3;
+}
+QPushButton:pressed {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #0056b3, stop: 1 #004085);
+}
+QPushButton:disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+    border: 2px solid #dee2e6;
+}
+</string>
+       </property>
+       <property name="text">
+        <string>存款</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget_3">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>520</y>
+      <width>451</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QPushButton" name="back">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    font: bold 14pt &quot;Microsoft YaHei UI&quot;;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #ffffff, stop: 1 #f8f9fa);
+    border: 2px solid #007bff;
+    border-radius: 12px;
+    color: #007bff;
+    padding: 12px 20px;
+    min-height: 20px;
+}
+QPushButton:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #007bff, stop: 1 #0056b3);
+    color: white;
+    border: 2px solid #0056b3;
+}
+QPushButton:pressed {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #0056b3, stop: 1 #004085);
+}
+QPushButton:disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+    border: 2px solid #dee2e6;
+}
+</string>
+       </property>
+       <property name="text">
+        <string>上一頁</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Policy::Preferred</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="logout">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">
+QPushButton {
+    font: bold 14pt &quot;Microsoft YaHei UI&quot;;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #ff6b6b, stop: 1 #ee5a52);
+    border: 2px solid #dc3545;
+    color: white;
+    border-radius: 12px;
+    padding: 12px 20px;
+    min-height: 20px;
+}
+QPushButton:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #dc3545, stop: 1 #c82333);
+}
+</string>
+       </property>
+       <property name="text">
+        <string>登出</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLabel" name="label_slogan">
+    <property name="geometry">
+     <rect>
+      <x>1080</x>
+      <y>70</y>
+      <width>121</width>
+      <height>551</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>ForbiddenCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+    font: bold 20pt &quot;Noto Sans TC&quot;, &quot;Microsoft JhengHei&quot;, &quot;Microsoft YaHei UI&quot;, sans-serif;
+    color: #1a2a36;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #7ee8dd, stop: 1 #2fbfa7);
+    border-radius: 12px;
+    padding: 10px;
+    qproperty-alignment: AlignCenter;
+}
+</string>
+    </property>
+    <property name="text">
+     <string>存
+款
+有
+保
+障
+，
+理
+財
+更
+安
+心
+！</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

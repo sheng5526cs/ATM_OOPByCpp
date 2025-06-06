@@ -72,5 +72,5 @@ void userwindow::on_idk_clicked(){
     // 顯示對話框
     msgBox.exec();
     
-    emit contactService();
+
 }
