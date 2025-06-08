@@ -1,0 +1,273 @@
+@startuml ATM Complete System Signal-Slot Sequence
+!theme plain
+
+' PowerPoint 長方形佈局優化設定
+skinparam backgroundColor White
+skinparam participantBackgroundColor White
+skinparam participantBorderColor Black
+skinparam participantFontSize 8
+skinparam participantFontName Arial
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1
+skinparam sequenceLifeLineBorderColor Black
+skinparam noteFontSize 7
+skinparam noteBackgroundColor LightYellow
+skinparam noteBorderColor Black
+skinparam shadowing false
+skinparam roundcorner 0
+skinparam maxMessageSize 100
+
+title ATM系統完整信號槽交互序列圖 (Complete System Signal-Slot Sequence)
+
+' ===== 參與者定義 =====
+actor User as "用戶/管理員"
+participant loginWindow as "登入視窗"
+participant Controller as "控制器"
+participant DatabaseManager as "資料庫管理"
+participant adminWindow as "管理員視窗"
+participant userwindow as "用戶視窗"
+participant TransactionWindow as "交易視窗"
+participant summarywindow as "摘要視窗"
+
+' ===== 系統啟動階段 =====
+note over User, summarywindow
+  **系統啟動與初始化階段**
+end note
+
+User -> loginWindow: 啟動應用程式
+loginWindow -> Controller: 建立控制器實例
+Controller -> DatabaseManager: 初始化資料庫連接
+DatabaseManager -> Controller: 連接成功確認
+Controller -> loginWindow: 顯示登入介面
+
+' ===== 認證階段 =====
+note over User, summarywindow
+  **身份認證階段**
+end note
+
+User -> loginWindow: 輸入帳號密碼
+loginWindow -> loginWindow: 驗證輸入格式
+loginWindow -> Controller: signal: loginPress()
+Controller -> DatabaseManager: 查詢用戶認證資訊
+DatabaseManager -> Controller: 返回認證結果與用戶類型
+
+' ===== 管理員模式分支 =====
+alt 管理員登入成功
+    note over Controller, adminWindow
+      **管理員操作流程**
+    end note
+    
+    Controller -> adminWindow: 顯示管理員主控台
+    Controller -> Controller: 設定管理員模式狀態
+    
+    ' === 帳戶管理操作 ===
+    User -> adminWindow: 選擇帳戶管理功能
+    adminWindow -> Controller: signal: accountListRequested()
+    Controller -> DatabaseManager: 查詢所有帳戶資訊
+    DatabaseManager -> Controller: 返回帳戶列表
+    Controller -> "acclistWindow": 顯示帳戶列表視窗
+    
+    ' === 新增帳戶操作 ===
+    User -> adminWindow: 選擇新增帳戶
+    adminWindow -> Controller: signal: addAccountRequested()
+    Controller -> "addaccWindow": 顯示新增帳戶視窗
+    User -> "addaccWindow": 輸入新帳戶資訊
+    "addaccWindow" -> Controller: signal: accountAdded()
+    Controller -> DatabaseManager: 執行帳戶新增操作
+    DatabaseManager -> Controller: 返回新增結果
+    Controller -> adminWindow: 更新管理員介面
+    
+    ' === 密碼重設操作 ===
+    User -> adminWindow: 選擇重設密碼
+    adminWindow -> Controller: signal: resetPasswordRequested()
+    Controller -> "setpasswordWindow": 顯示密碼重設視窗
+    User -> "setpasswordWindow": 輸入新密碼
+    "setpasswordWindow" -> Controller: signal: passwordUpdated()
+    Controller -> DatabaseManager: 更新加密密碼
+    DatabaseManager -> Controller: 返回更新結果
+    
+    ' === 狀態變更操作 ===
+    User -> adminWindow: 選擇變更帳戶狀態
+    adminWindow -> Controller: signal: changeStatusRequested()
+    Controller -> "setstatusWindow": 顯示狀態變更視窗
+    User -> "setstatusWindow": 選擇新狀態
+    "setstatusWindow" -> Controller: signal: statusUpdated()
+    Controller -> DatabaseManager: 更新帳戶狀態
+    DatabaseManager -> Controller: 返回更新結果
+
+else 用戶登入成功
+    note over Controller, summarywindow
+      **用戶操作流程**
+    end note
+    
+    Controller -> userwindow: 顯示用戶主控台
+    Controller -> DatabaseManager: 載入用戶餘額資訊
+    DatabaseManager -> Controller: 返回用戶資料
+    Controller -> userwindow: 設定用戶資訊與餘額
+    Controller -> Controller: 啟動90秒會話計時器
+    
+    ' === 存款操作流程 ===
+    User -> userwindow: 選擇存款功能
+    userwindow -> Controller: signal: depositRequested()
+    Controller -> "depositWindow": 顯示存款視窗
+    Controller -> "depositWindow": 傳遞用戶資訊
+    User -> "depositWindow": 選擇或輸入存款金額
+    "depositWindow" -> "depositWindow": 驗證存款金額
+    User -> "depositWindow": 確認存款操作
+    "depositWindow" -> Controller: signal: showSummary()
+    Controller -> DatabaseManager: 執行存款交易
+    DatabaseManager -> DatabaseManager: 更新餘額與記錄交易
+    DatabaseManager -> Controller: 返回交易結果
+    Controller -> summarywindow: 顯示交易摘要
+    Controller -> summarywindow: 傳遞交易資訊
+    
+    ' === 提款操作流程 ===
+    User -> userwindow: 選擇提款功能
+    userwindow -> Controller: signal: withdrawRequested()
+    Controller -> "withdrowWindow": 顯示提款視窗
+    Controller -> "withdrowWindow": 傳遞用戶資訊
+    User -> "withdrowWindow": 選擇或輸入提款金額
+    "withdrowWindow" -> "withdrowWindow": 驗證提款金額與餘額
+    User -> "withdrowWindow": 確認提款操作
+    "withdrowWindow" -> Controller: signal: showSummary()
+    Controller -> DatabaseManager: 執行提款交易
+    DatabaseManager -> DatabaseManager: 檢查餘額並更新
+    DatabaseManager -> Controller: 返回交易結果
+    Controller -> summarywindow: 顯示交易摘要
+    
+    ' === 轉帳操作流程 ===
+    User -> userwindow: 選擇轉帳功能
+    userwindow -> Controller: signal: transferRequested()
+    Controller -> TransactionWindow: 顯示轉帳視窗
+    Controller -> TransactionWindow: 傳遞用戶資訊
+    User -> TransactionWindow: 輸入目標帳戶與金額
+    TransactionWindow -> DatabaseManager: 驗證目標帳戶存在
+    DatabaseManager -> TransactionWindow: 返回驗證結果
+    TransactionWindow -> TransactionWindow: 驗證轉帳金額與餘額
+    User -> TransactionWindow: 確認轉帳操作
+    TransactionWindow -> Controller: signal: showSummary()
+    Controller -> DatabaseManager: 執行原子性轉帳交易
+    DatabaseManager -> DatabaseManager: 更新雙方帳戶餘額
+    DatabaseManager -> Controller: 返回交易結果
+    Controller -> summarywindow: 顯示交易摘要
+    
+    ' === 交易歷史查詢 ===
+    User -> userwindow: 選擇交易歷史
+    userwindow -> Controller: signal: transactionHistoryRequested()
+    Controller -> "docuWindow": 顯示歷史查詢視窗
+    "docuWindow" -> DatabaseManager: 查詢用戶交易記錄
+    DatabaseManager -> "docuWindow": 返回最近5筆交易
+    "docuWindow" -> "docuWindow": 格式化顯示交易列表
+    
+    ' === 密碼變更操作 ===
+    User -> userwindow: 選擇變更密碼
+    userwindow -> Controller: signal: changePasswordRequested()
+    Controller -> "changepasswordWindow": 顯示密碼變更視窗
+    User -> "changepasswordWindow": 輸入舊密碼與新密碼
+    "changepasswordWindow" -> DatabaseManager: 驗證舊密碼
+    DatabaseManager -> "changepasswordWindow": 返回驗證結果
+    "changepasswordWindow" -> "changepasswordWindow": 驗證新密碼格式
+    User -> "changepasswordWindow": 確認密碼變更
+    "changepasswordWindow" -> Controller: signal: passwordChanged()
+    Controller -> DatabaseManager: 更新加密新密碼
+    DatabaseManager -> Controller: 返回更新結果
+    
+    ' === 交易摘要處理 ===
+    User -> summarywindow: 查看交易結果
+    summarywindow -> summarywindow: 顯示交易詳細資訊
+    User -> summarywindow: 選擇繼續或結束
+    alt 用戶選擇繼續交易
+        summarywindow -> Controller: signal: continueTransaction()
+        Controller -> userwindow: 返回用戶主控台
+        Controller -> Controller: 重置會話計時器
+    else 用戶選擇結束交易
+        summarywindow -> Controller: signal: finishTransaction()
+        Controller -> Controller: 清理會話資料
+        Controller -> loginWindow: 返回登入畫面
+    end
+
+else 登入失敗
+    note over loginWindow, Controller
+      **認證失敗處理**
+    end note
+    
+    Controller -> loginWindow: 顯示錯誤訊息
+    loginWindow -> loginWindow: 增加失敗嘗試計數
+    alt 超過最大嘗試次數
+        loginWindow -> loginWindow: 鎖定登入功能
+        loginWindow -> Controller: 記錄安全事件
+        Controller -> DatabaseManager: 寫入安全日誌
+    else 尚未超過限制
+        loginWindow -> loginWindow: 清空輸入欄位
+        loginWindow -> User: 提示重新輸入
+    end
+end
+
+' ===== 會話管理與超時處理 =====
+note over Controller, userwindow
+  **會話超時管理機制**
+end note
+
+loop 會話進行中
+    Controller -> Controller: 檢查會話活動時間
+    alt 接近90秒超時
+        Controller -> userwindow: 顯示超時警告
+        userwindow -> User: 提示會話即將過期
+        User -> userwindow: 任意操作
+        userwindow -> Controller: 重置會話計時器
+    else 超過90秒無活動
+        Controller -> Controller: 強制會話超時
+        Controller -> Controller: 清理所有視窗狀態
+        Controller -> DatabaseManager: 記錄會話結束日誌
+        Controller -> loginWindow: 返回登入畫面
+        Controller -> User: 顯示超時通知
+    end
+end
+
+' ===== 系統關閉階段 =====
+note over User, summarywindow
+  **系統關閉與清理階段**
+end note
+
+User -> Controller: 執行登出操作
+Controller -> DatabaseManager: 更新用戶最後活動時間
+Controller -> Controller: 清理所有視窗資源
+Controller -> Controller: 終止會話計時器
+Controller -> DatabaseManager: 關閉資料庫連接
+Controller -> loginWindow: 顯示登出成功訊息
+loginWindow -> User: 應用程式安全退出
+
+' ===== 系統特性說明 =====
+note over User, summarywindow
+  **ATM系統完整信號槽架構特性:**
+  
+  **1. 統一的事件驅動架構**
+  • 所有用戶操作通過信號槽機制處理
+  • Controller 作為中央調度器管理所有視窗
+  • 非同步事件處理確保介面響應性
+  
+  **2. 完整的安全機制**
+  • 90秒會話超時自動保護
+  • 登入失敗次數限制與鎖定
+  • 密碼 SHA-256 加密存儲
+  • 所有操作記錄安全日誌
+  
+  **3. 原子性交易保證**
+  • 資料庫交易ACID特性保證
+  • 轉帳操作雙方帳戶同步更新
+  • 異常情況自動回滾機制
+  
+  **4. 用戶體驗優化**
+  • 即時輸入驗證與錯誤提示
+  • 交易摘要確認機制
+  • 直觀的操作流程引導
+  • 響應式介面設計
+  
+  **5. 系統可維護性**
+  • 模組化視窗設計
+  • 清晰的職責分離
+  • 統一的錯誤處理機制
+  • 完整的操作追蹤日誌
+end note
+
+@enduml

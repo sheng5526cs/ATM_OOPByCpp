@@ -1,0 +1,173 @@
+@startuml ATM User Core Architecture
+!theme plain
+
+' PowerPoint 長方形佈局優化設定
+skinparam backgroundColor White
+skinparam classBackgroundColor White
+skinparam classBorderColor Black
+skinparam classBorderThickness 1
+skinparam classAttributeIconSize 0
+skinparam classFontSize 10
+skinparam classFontName Arial
+skinparam packageFontSize 9
+skinparam packageBackgroundColor LightGray
+skinparam packageBorderColor Black
+skinparam packageBorderThickness 1
+skinparam noteFontSize 8
+skinparam noteBackgroundColor LightYellow
+skinparam noteBorderColor Black
+skinparam arrowColor Black
+skinparam arrowThickness 1
+skinparam shadowing false
+skinparam roundcorner 0
+skinparam packageStyle rectangle
+skinparam minClassWidth 150
+skinparam maxMessageSize 120
+skinparam wrapWidth 200
+
+title ATM系統用戶核心架構圖 (User Core Architecture)
+
+' ===== 核心控制器 =====
+class Controller <<Central Controller>> {
+    - userwin: userwindow*
+    - depositwin: depositWindow*
+    - withdrawwin: withdrowWindow*
+    - transwin: TransWindow*
+    - sessionTimer: QTimer*
+    --
+    + 管理所有用戶視窗生命週期
+    + 處理用戶認證與會話管理
+    + 協調交易信號槽連接
+}
+
+' ===== 用戶主控台 =====
+class userwindow <<User Console>> {
+    --
+    + deposit(): 存款
+    + withdraw(): 提款
+    + transfer(): 轉帳
+    + transactionHistory(): 歷史
+    + changepass(): 修改密碼
+    + logout(): 登出
+}
+
+' ===== 交易處理模組 =====
+package "交易處理模組" {
+    class depositWindow <<Deposit>> {
+        --
+        + 存款金額輸入
+        + 餘額驗證更新
+        + showSummary()
+    }
+
+    class withdrowWindow <<Withdraw>> {
+        --
+        + 提款金額輸入
+        + 快速金額選擇
+        + showSummary()
+    }
+
+    class TransWindow <<Transfer>> {
+        --
+        + 轉帳目標帳戶
+        + 轉帳金額輸入
+        + showSummary()
+    }
+}
+
+' ===== 用戶服務模組 =====
+package "用戶服務模組" {
+    class changepasswordWindow <<Password>> {
+        --
+        + 舊密碼驗證
+        + 新密碼設定
+        + SHA-256加密
+    }
+
+    class docuWindow <<History>> {
+        --
+        + 顯示交易歷史
+        + 5筆記錄追蹤
+        + 時間排序顯示
+    }
+
+    class summarywindow <<Summary>> {
+        --
+        + 交易結果顯示
+        + 新餘額確認
+        + 繼續/登出選擇
+    }
+}
+
+' ===== 資料庫管理 =====
+class DatabaseManager <<Database>> {
+    --
+    + fetchPassword(): int
+    + fetchUserData(): bool  
+    + updateBalance(): void
+    + recordTransaction(): void
+    --
+    用戶認證狀態: 200/201
+}
+
+' ===== 認證層 =====
+class loginWindow <<Authentication>> {
+    --
+    + loginPress(): signal
+    --
+    用戶登入認證與餘額載入
+}
+
+' ===== 核心關係 =====
+Controller *-- userwindow
+Controller *-- depositWindow  
+Controller *-- withdrowWindow
+Controller *-- TransWindow
+Controller *-- DatabaseManager
+Controller <-- loginWindow : "認證"
+
+' ===== 功能流程 =====
+userwindow -.-> depositWindow : "存款"
+userwindow -.-> withdrowWindow : "提款"  
+userwindow -.-> TransWindow : "轉帳"
+userwindow -.-> docuWindow : "查詢"
+userwindow -.-> changepasswordWindow : "修改密碼"
+
+' ===== 交易摘要流程 =====
+depositWindow -.-> summarywindow : "完成"
+withdrowWindow -.-> summarywindow : "完成"
+TransWindow -.-> summarywindow : "完成"
+
+' ===== 資料存取 =====
+depositWindow --> DatabaseManager
+withdrowWindow --> DatabaseManager  
+TransWindow --> DatabaseManager
+changepasswordWindow --> DatabaseManager
+docuWindow --> DatabaseManager
+
+' ===== 用戶操作流程說明 =====
+note right of Controller
+  **用戶操作流程:**
+  1. 用戶登入認證 (status 201)
+  2. 進入用戶主控台
+  3. 選擇金融服務:
+     • 存款作業
+     • 提款作業  
+     • 轉帳作業
+     • 交易歷史查詢
+     • 密碼修改
+  4. 交易摘要確認
+  5. 90秒會話超時管理
+  6. 安全登出
+end note
+
+note bottom of DatabaseManager
+  **交易安全機制:**
+  • 5層交易歷史追蹤
+  • 原子性資料庫操作
+  • 即時餘額更新
+  • 加密密碼存儲
+  • 參數化查詢防護
+end note
+
+@enduml

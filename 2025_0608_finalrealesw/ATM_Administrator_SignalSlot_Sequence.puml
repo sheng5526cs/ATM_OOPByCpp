@@ -1,0 +1,112 @@
+@startuml ATM Administrator Signal-Slot Interaction
+!theme plain
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+
+title ATM管理員功能信號槽互動圖\n(Administrator Signal-Slot Interaction Diagram)
+
+actor Administrator as admin
+participant "loginWindow" as login
+participant "Controller" as ctrl
+participant "adminwindow" as adminwin
+participant "acclistWindow" as acclist
+participant "addaccwindow" as addacc
+participant "setpasswordwindow" as setpw
+participant "setstatuswindow" as setstat
+participant "DatabaseManager" as db
+
+== 管理員登入流程 ==
+admin -> login: 輸入管理員帳密
+login -> ctrl: emit adminpress(account, password)
+ctrl -> db: fetchPassword(account, password)
+db --> ctrl: return 501 (已認證管理員)
+ctrl -> login: hide()
+ctrl -> adminwin: show()
+
+== 管理員主控台操作 ==
+admin -> adminwin: 選擇功能
+note over adminwin: 管理員可選擇五種功能
+
+== 帳戶列表管理 ==
+adminwin -> ctrl: emit Accountlist()
+ctrl -> adminwin: hide()
+ctrl -> acclist: refresh()
+ctrl -> acclist: show()
+acclist -> db: loadAccounts()
+admin -> acclist: 查看完畢，返回
+acclist -> ctrl: emit back()
+ctrl -> acclist: hide()
+ctrl -> adminwin: show()
+
+== 新增帳戶流程 ==
+adminwin -> ctrl: emit addaccountwindow()
+ctrl -> adminwin: hide()
+ctrl -> addacc: show()
+admin -> addacc: 填寫新帳戶資料
+addacc -> db: 執行新增帳戶SQL
+db --> addacc: 新增成功
+admin -> addacc: 返回主控台
+addacc -> ctrl: emit back()
+ctrl -> addacc: hide()
+ctrl -> adminwin: show()
+
+== 重設密碼流程 ==
+adminwin -> ctrl: emit passwordsetting()
+ctrl -> adminwin: hide()
+ctrl -> setpw: show()
+admin -> setpw: 輸入帳戶與新密碼
+setpw -> db: 更新密碼 (SHA-256加密)
+db --> setpw: 更新成功
+admin -> setpw: 返回主控台
+setpw -> ctrl: emit back()
+ctrl -> setpw: hide()
+ctrl -> adminwin: show()
+
+== 變更帳戶狀態流程 ==
+adminwin -> ctrl: emit statuschange()
+ctrl -> adminwin: hide()
+ctrl -> setstat: show()
+admin -> setstat: 選擇帳戶與狀態
+setstat -> db: status(account, newStatus)
+db --> setstat: 狀態更新成功
+admin -> setstat: 返回主控台
+setstat -> ctrl: emit back()
+ctrl -> setstat: hide()
+ctrl -> adminwin: show()
+
+== 管理員登出流程 ==
+adminwin -> ctrl: emit logout()
+ctrl -> adminwin: hide()
+ctrl -> login: clearPassword()
+ctrl -> login: show()
+
+== 會話超時處理 ==
+note over ctrl: 90秒無操作自動超時
+ctrl -> ctrl: onSessionTimeout()
+ctrl -> adminwin: hide()
+ctrl -> acclist: hide()
+ctrl -> addacc: hide()
+ctrl -> setpw: hide()
+ctrl -> setstat: hide()
+ctrl -> login: clearPassword()
+ctrl -> login: show()
+
+note right of ctrl
+  **Controller 核心職責:**
+  • 管理所有視窗生命週期
+  • 處理信號槽連接
+  • 協調視窗切換邏輯
+  • 管理會話超時
+  • 維護靜態使用者資料
+end note
+
+note left of db
+  **資料庫操作安全:**
+  • 參數化SQL查詢
+  • SHA-256密碼加密
+  • 狀態碼權限驗證
+  • 交易記錄追蹤
+end note
+
+@enduml

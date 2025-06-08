@@ -1,0 +1,219 @@
+@startuml Controller_Detailed_UML
+!theme cerulean-outline
+skinparam backgroundColor #f8f9fa
+skinparam classBackgroundColor #ffffff
+skinparam classBorderColor #2196F3
+skinparam classBorderThickness 2
+skinparam classHeaderBackgroundColor #E3F2FD
+skinparam arrowColor #1976D2
+skinparam arrowThickness 2
+
+title "ATM 系統 - Controller 類詳細 UML 圖"
+
+' Controller 類的完整定義
+class Controller {
+    ' === 靜態成員變數 ===
+    - {static} id : QString
+    - {static} account : QString  
+    - {static} balance : double
+
+    ' === 實例成員變數 - 視窗管理 ===
+    - loginWin : loginWindow*
+    - userWin : userwindow*
+    - adminwin : adminwindow*
+    - acclist : acclistWindow*
+    - addacc : addaccwindow*
+    - spw : setpasswordwindow*
+    - ssw : setstatuswindow*
+    - changepw : changepasswordWindow*
+    - withdrowwin : withdrowWindow*
+    - docuwin : docuWindow*
+    - depositwin : depositWindow*
+    - transwin : TransWindow*
+    - summaryWin : summarywindow*
+
+    ' === 實例成員變數 - 系統管理 ===
+    - sessionTimer : QTimer*
+    - sessionActive : bool
+    - dbm : DatabaseManager
+
+    ' === 公開方法 ===
+    + Controller(parent : QObject* = nullptr)
+    + start() : void
+    
+    ' === 靜態方法 - 會話資料管理 ===
+    + {static} Getid() : QString
+    + {static} Getaccount() : QString
+    + {static} Getbalance() : double
+    + {static} Setid(id : const QString&) : void
+    + {static} Setaccount(account : const QString&) : void
+    + {static} Setbalance(balance : double) : void
+
+    ' === 會話管理方法 ===
+    + resetSessionTimer() : void
+    + handleSessionTimeout() : void
+
+    ' === 私有槽函數 ===
+    - onSessionTimeout() : void
+}
+
+' 相關的關鍵類別（簡化版本）
+class QObject {
+    + QObject(parent : QObject* = nullptr)
+    # connect()
+    # disconnect()
+}
+
+class QTimer {
+    + start() : void
+    + stop() : void
+    + timeout : signal
+}
+
+class DatabaseManager {
+    + connect() : bool
+    + fetchPassword(account : QString, password : QString) : int
+    + fetchUserData(account : QString) : bool
+}
+
+' 視窗類別群組
+package "視窗類別" {
+    class loginWindow {
+        + loginPress : signal
+        + adminpress : signal
+        + clearPassword() : void
+    }
+    
+    class userwindow {
+        + logout : signal
+        + deposit : signal
+        + withdraw : signal
+        + transfer : signal
+        + transactionHistory : signal
+        + changepass : signal
+        + setWelcomeText(account : QString) : void
+    }
+    
+    class adminwindow {
+        + logout : signal
+        + Accountlist : signal
+        + addaccountwindow : signal
+        + passwordsetting : signal
+        + statuschange : signal
+    }
+    
+    class depositWindow {
+        + back : signal
+        + logout : signal
+        + refreshBalance() : void
+    }
+    
+    class withdrowWindow {
+        + back : signal
+        + logout : signal
+        + refreshBalance() : void
+    }
+    
+    class TransWindow {
+        + back : signal
+        + logout : signal
+        + refreshBalance() : void
+    }
+    
+    class docuWindow {
+        + back : signal
+        + logout : signal
+        + setAccountAndBalance(account : QString, balance : double) : void
+        + refreshTable(account : QString) : void
+    }
+    
+    class changepasswordWindow {
+        + back : signal
+        + logout : signal
+    }
+    
+    class acclistWindow {
+        + back : signal
+        + logout : signal
+        + refresh() : void
+    }
+    
+    class addaccwindow {
+        + back : signal
+        + logout : signal
+    }
+    
+    class setpasswordwindow {
+        + back : signal
+        + logout : signal
+    }
+    
+    class setstatuswindow {
+        + back : signal
+        + logout : signal
+    }
+    
+    class summarywindow {
+        + back : signal
+        + logout : signal
+    }
+}
+
+' 繼承關係
+Controller --|> QObject : 繼承
+
+' 組合關係 - Controller 擁有並管理這些物件
+Controller *-- loginWindow : 擁有
+Controller *-- userwindow : 擁有
+Controller *-- adminwindow : 擁有
+Controller *-- depositWindow : 擁有
+Controller *-- withdrowWindow : 擁有
+Controller *-- TransWindow : 擁有
+Controller *-- docuWindow : 擁有
+Controller *-- changepasswordWindow : 擁有
+Controller *-- acclistWindow : 擁有
+Controller *-- addaccwindow : 擁有
+Controller *-- setpasswordwindow : 擁有
+Controller *-- setstatuswindow : 擁有
+Controller *-- summarywindow : 擁有
+
+' 組合關係 - 系統組件
+Controller *-- QTimer : 擁有
+Controller *-- DatabaseManager : 擁有
+
+' 依賴關係 - Controller 使用這些功能
+Controller ..> QObject : <<use>>
+
+' 註解說明 Controller 的核心職責
+note right of Controller
+    **核心職責：**
+    1. **視窗生命週期管理**
+       - 創建和銷毀所有視窗實例
+       - 控制視窗間的切換流程
+    
+    2. **信號槽連接中心**
+       - 建立所有視窗間的通信
+       - 處理用戶操作事件路由
+    
+    3. **會話管理**
+       - 90秒超時自動登出
+       - 會話狀態追蹤
+    
+    4. **全局狀態管理**
+       - 靜態變數管理用戶資料
+       - 跨視窗資料共享
+    
+    5. **安全控制**
+       - 登入驗證流程
+       - 管理員權限控制
+end note
+
+note bottom of "視窗類別"
+    **視窗管理模式：**
+    • Controller 採用集中式視窗管理
+    • 所有視窗實例在 Controller 建構時創建
+    • 透過 hide()/show() 控制視窗顯示
+    • 信號槽機制處理視窗間通信
+end note
+
+@enduml

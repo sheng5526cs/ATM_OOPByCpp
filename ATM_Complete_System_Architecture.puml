@@ -1,0 +1,379 @@
+@startuml ATM Complete System Architecture
+!theme plain
+
+' PowerPoint 長方形佈局優化設定
+skinparam backgroundColor White
+skinparam classBackgroundColor White
+skinparam classBorderColor Black
+skinparam classBorderThickness 1
+skinparam classAttributeIconSize 0
+skinparam classFontSize 9
+skinparam classFontName Arial
+skinparam packageFontSize 8
+skinparam packageBackgroundColor LightGray
+skinparam packageBorderColor Black
+skinparam packageBorderThickness 1
+skinparam noteFontSize 7
+skinparam noteBackgroundColor LightYellow
+skinparam noteBorderColor Black
+skinparam arrowColor Black
+skinparam arrowThickness 1
+skinparam shadowing false
+skinparam roundcorner 0
+skinparam packageStyle rectangle
+skinparam minClassWidth 120
+skinparam maxMessageSize 80
+skinparam wrapWidth 160
+
+title ATM系統完整架構圖 (Complete System Architecture)
+
+' ===== 表現層 (Presentation Layer) =====
+package "表現層 (Presentation Layer)" #LightBlue {
+    
+    package "認證介面" {
+        class loginWindow <<UI>> {
+            + 用戶登入
+            + 管理員登入
+            + 身份驗證
+        }
+    }
+    
+    package "管理員介面群組" {
+        class adminWindow <<Admin UI>> {
+            + 管理員主控台
+        }
+        
+        class acclistWindow <<Admin UI>> {
+            + 帳戶列表管理
+        }
+        
+        class addaccWindow <<Admin UI>> {
+            + 新增帳戶
+        }
+        
+        class setpasswordWindow <<Admin UI>> {
+            + 重設密碼
+        }
+        
+        class setstatusWindow <<Admin UI>> {
+            + 帳戶狀態管理
+        }
+    }
+    
+    package "用戶介面群組" {
+        class userwindow <<User UI>> {
+            + 用戶主控台
+        }
+        
+        class depositWindow <<User UI>> {
+            + 存款作業
+        }
+        
+        class withdrowWindow <<User UI>> {
+            + 提款作業
+        }
+        
+        class TransWindow <<User UI>> {
+            + 轉帳作業
+        }
+        
+        class changepasswordWindow <<User UI>> {
+            + 密碼變更
+        }
+        
+        class docuWindow <<User UI>> {
+            + 交易歷史
+        }
+        
+        class summarywindow <<User UI>> {
+            + 交易摘要
+        }
+    }
+}
+
+' ===== 業務邏輯層 (Business Logic Layer) =====
+package "業務邏輯層 (Business Logic Layer)" #LightGreen {
+    
+    class Controller <<Central Controller>> {
+        - 視窗生命週期管理
+        - 模式切換控制
+        - 會話管理
+        - 超時處理
+        - 安全機制
+        --
+        + 管理員模式切換
+        + 用戶模式切換
+        + 會話超時管理
+        + 安全登出控制
+    }
+    
+    package "管理員業務邏輯" {
+        class AdminBusinessLogic <<Business Logic>> {
+            + 帳戶CRUD操作
+            + 密碼重設邏輯
+            + 狀態變更邏輯
+            + 權限驗證
+        }
+    }
+    
+    package "用戶業務邏輯" {
+        class UserBusinessLogic <<Business Logic>> {
+            + 交易處理邏輯
+            + 餘額驗證
+            + 轉帳邏輯
+            + 密碼變更邏輯
+            + 歷史查詢邏輯
+        }
+    }
+    
+    package "安全業務邏輯" {
+        class SecurityLogic <<Security Logic>> {
+            + 身份認證
+            + 密碼加密
+            + 會話管理
+            + 存取控制
+            + 超時處理
+        }
+    }
+}
+
+' ===== 服務層 (Service Layer) =====
+package "服務層 (Service Layer)" #LightCoral {
+    
+    class AuthenticationService <<Authentication>> {
+        + 用戶登入驗證
+        + 管理員登入驗證
+        + 密碼驗證
+        + 會話建立
+        + 權限檢查
+    }
+    
+    class AccountService <<Account Management>> {
+        + 帳戶建立
+        + 帳戶查詢
+        + 帳戶更新
+        + 帳戶刪除
+        + 狀態管理
+    }
+    
+    class TransactionService <<Transaction Processing>> {
+        + 存款處理
+        + 提款處理
+        + 轉帳處理
+        + 餘額查詢
+        + 交易驗證
+    }
+    
+    class HistoryService <<Transaction History>> {
+        + 交易記錄
+        + 歷史查詢
+        + 報表生成
+        + 資料匯出
+    }
+    
+    class SecurityService <<Security Management>> {
+        + 密碼加密
+        + 會話管理
+        + 超時控制
+        + 存取日誌
+        + 安全審計
+    }
+}
+
+' ===== 資料存取層 (Data Access Layer) =====
+package "資料存取層 (Data Access Layer)" #LightYellow {
+    
+    class DatabaseManager <<Data Access>> {
+        - db: QSqlDatabase
+        - connectionPool
+        --
+        + 資料庫連接管理
+        + SQL查詢執行
+        + 交易管理
+        + 錯誤處理
+        + 連接池管理
+    }
+    
+    class AccountRepository <<Repository>> {
+        + createAccount()
+        + findAccount()
+        + updateAccount()
+        + deleteAccount()
+        + listAllAccounts()
+    }
+    
+    class TransactionRepository <<Repository>> {
+        + recordTransaction()
+        + getTransactionHistory()
+        + updateBalance()
+        + getBalance()
+        + validateTransaction()
+    }
+    
+    class UserRepository <<Repository>> {
+        + authenticateUser()
+        + updatePassword()
+        + getUserInfo()
+        + updateUserStatus()
+        + logUserActivity()
+    }
+}
+
+' ===== 資料模型層 (Data Model Layer) =====
+package "資料模型層 (Data Model Layer)" #LightPink {
+    
+    class AccountInfo <<Data Model>> {
+        + account: QString
+        + balance: double
+        + status: int
+        + createDate: QDateTime
+        + lastLogin: QDateTime
+    }
+    
+    class TransactionInfo <<Data Model>> {
+        + transactionId: QString
+        + account: QString
+        + type: QString
+        + amount: double
+        + timestamp: QDateTime
+    }
+    
+    class UserSession <<Session Model>> {
+        + userId: QString
+        + loginTime: QDateTime
+        + isAdmin: bool
+        + timeoutDuration: int
+    }
+    
+    class SystemConfig <<Configuration>> {
+        + sessionTimeout: int
+        + maxLoginAttempts: int
+        + transactionLimits: Map
+        + securitySettings: Map
+    }
+}
+
+' ===== 持久化層 (Persistence Layer) =====
+package "持久化層 (Persistence Layer)" #LightSteelBlue {
+    
+    database "SQLite 資料庫" as DB {
+        table "accounts" {
+            account_id: VARCHAR(20) PK
+            password_hash: VARCHAR(64)
+            balance: DECIMAL(15,2)
+            status: INTEGER
+            created_at: DATETIME
+            updated_at: DATETIME
+        }
+        
+        table "transactions" {
+            transaction_id: VARCHAR(36) PK
+            account_id: VARCHAR(20) FK
+            transaction_type: VARCHAR(10)
+            amount: DECIMAL(15,2)
+            balance_after: DECIMAL(15,2)
+            created_at: DATETIME
+            description: TEXT
+        }
+        
+        table "user_sessions" {
+            session_id: VARCHAR(36) PK
+            account_id: VARCHAR(20) FK
+            login_time: DATETIME
+            last_activity: DATETIME
+            is_admin: BOOLEAN
+            is_active: BOOLEAN
+        }
+        
+        table "system_logs" {
+            log_id: INTEGER PK
+            account_id: VARCHAR(20)
+            action: VARCHAR(50)
+            ip_address: VARCHAR(15)
+            timestamp: DATETIME
+            details: TEXT
+        }
+    }
+}
+
+' ===== 分層關係 (Layer Relationships) =====
+
+' 表現層 -> 業務邏輯層
+loginWindow --> Controller
+adminWindow --> Controller
+userwindow --> Controller
+acclistWindow --> Controller
+addaccWindow --> Controller
+setpasswordWindow --> Controller
+setstatusWindow --> Controller
+depositWindow --> Controller
+withdrowWindow --> Controller
+TransWindow --> Controller
+changepasswordWindow --> Controller
+docuWindow --> Controller
+summarywindow --> Controller
+
+' 業務邏輯層 -> 服務層
+Controller --> AuthenticationService
+AdminBusinessLogic --> AccountService
+UserBusinessLogic --> TransactionService
+UserBusinessLogic --> HistoryService
+SecurityLogic --> SecurityService
+
+' 服務層 -> 資料存取層
+AuthenticationService --> DatabaseManager
+AccountService --> AccountRepository
+TransactionService --> TransactionRepository
+HistoryService --> TransactionRepository
+SecurityService --> UserRepository
+
+' 資料存取層 -> 資料模型層
+AccountRepository ..> AccountInfo
+TransactionRepository ..> TransactionInfo
+UserRepository ..> UserSession
+DatabaseManager ..> SystemConfig
+
+' 資料存取層 -> 持久化層
+DatabaseManager --> DB
+AccountRepository --> DB
+TransactionRepository --> DB
+UserRepository --> DB
+
+' ===== 系統特性說明 =====
+note top of Controller
+  **核心控制器特性:**
+  • MVC 架構模式
+  • 單一責任原則
+  • 依賴注入管理
+  • 事件驅動設計
+  • 狀態機管理
+end note
+
+note right of DB
+  **資料庫特性:**
+  • ACID 事務保證
+  • 外鍵約束完整性
+  • 索引最佳化
+  • 備份與復原機制
+  • 並發控制
+end note
+
+note bottom of SecurityService
+  **安全機制特性:**
+  • SHA-256 密碼加密
+  • 會話超時控制
+  • 登入嘗試限制
+  • 操作日誌記錄
+  • 權限分級管理
+end note
+
+note left of TransactionService
+  **交易處理特性:**
+  • 原子性操作保證
+  • 餘額即時更新
+  • 交易限額控制
+  • 異常回滾機制
+  • 重複交易防護
+end note
+
+@enduml

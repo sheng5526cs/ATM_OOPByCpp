@@ -145,6 +145,7 @@ Controller::Controller(QObject *parent)
 
 
 
+
     // 連接使用者視窗的登出訊號
     connect(userWin, &userwindow::logout, this, [=]() {
         // 清除靜態帳戶與密碼資訊

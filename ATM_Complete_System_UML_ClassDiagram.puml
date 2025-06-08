@@ -1,0 +1,622 @@
+@startuml ATM Complete System UML Class Diagram
+!theme plain
+
+' PowerPoint 長方形佈局優化設定
+skinparam backgroundColor White
+skinparam classBackgroundColor White
+skinparam classBorderColor Black
+skinparam classBorderThickness 1
+skinparam classAttributeIconSize 0
+skinparam classFontSize 9
+skinparam classFontName Arial
+skinparam packageFontSize 8
+skinparam packageBackgroundColor LightGray
+skinparam packageBorderColor Black
+skinparam packageBorderThickness 1
+skinparam noteFontSize 7
+skinparam noteBackgroundColor LightYellow
+skinparam noteBorderColor Black
+skinparam arrowColor Black
+skinparam arrowThickness 1
+skinparam shadowing false
+skinparam roundcorner 0
+skinparam packageStyle rectangle
+skinparam minClassWidth 130
+skinparam maxMessageSize 100
+skinparam wrapWidth 180
+
+title ATM系統完整類圖 (Complete System UML Class Diagram)
+
+' ===== 核心控制器層 =====
+package "核心控制器層 (Core Controller Layer)" #LightBlue {
+    class Controller <<Central Controller>> {
+        - loginwin: loginWindow*
+        - adminwin: adminWindow*
+        - userwin: userwindow*
+        - acclistwin: acclistWindow*
+        - addaccwin: addaccWindow*
+        - setpasswin: setpasswordWindow*
+        - setstatuswin: setstatusWindow*
+        - depositwin: depositWindow*
+        - withdrawwin: withdrowWindow*
+        - transwin: TransWindow*
+        - docuwin: docuWindow*
+        - changepasswin: changepasswordWindow*
+        - summarywin: summarywindow*
+        - dbManager: DatabaseManager*
+        - sessionTimer: QTimer*
+        - currentUser: QString
+        - isAdminMode: bool
+        --
+        + Controller(QWidget* parent = nullptr)
+        + ~Controller()
+        + showLoginWindow(): void
+        + handleAdminLogin(): void
+        + handleUserLogin(): void
+        + switchToAdminMode(): void
+        + switchToUserMode(): void
+        + resetSession(): void
+        + startSessionTimer(): void
+        + timeoutSession(): void
+        + closeAllWindows(): void
+    }
+
+    class DatabaseManager <<Database Layer>> {
+        - db: QSqlDatabase
+        - dbPath: QString
+        --
+        + DatabaseManager(QObject* parent = nullptr)
+        + ~DatabaseManager()
+        + connectToDatabase(): bool
+        + createTables(): bool
+        + executeQuery(QString query): QSqlQuery
+        + fetchPassword(QString account): int
+        + fetchUserData(QString account): bool
+        + updatePassword(QString account, QString newPass): bool
+        + updateBalance(QString account, double amount): bool
+        + updateStatus(QString account, int status): bool
+        + addAccount(QString account, QString password, double balance): bool
+        + deleteAccount(QString account): bool
+        + getAllAccounts(): QList<AccountInfo>
+        + recordTransaction(QString account, QString type, double amount): void
+        + getTransactionHistory(QString account): QList<TransactionInfo>
+        + validateAdmin(QString account, QString password): bool
+        + encryptPassword(QString password): QString
+        + generateTransactionId(): QString
+    }
+}
+
+' ===== 認證與登入層 =====
+package "認證與登入層 (Authentication Layer)" #LightGreen {
+    class loginWindow <<Authentication Window>> {
+        - ui: Ui::loginWindow*
+        - controller: Controller*
+        - attempts: int
+        - isLocked: bool
+        --
+        + loginWindow(QWidget* parent = nullptr)
+        + ~loginWindow()
+        + setController(Controller* ctrl): void
+        + resetForm(): void
+        + lockLogin(): void
+        + unlockLogin(): void
+        --
+        signals:
+        + loginPress(): void
+        + adminLoginRequested(): void
+        + userLoginRequested(): void
+        --
+        private slots:
+        + on_loginButton_clicked(): void
+        + on_accountLineEdit_textChanged(): void
+        + on_passwordLineEdit_textChanged(): void
+        + validateInput(): void
+        + showLoginError(QString message): void
+    }
+}
+
+' ===== 管理員功能層 =====
+package "管理員功能層 (Administrator Layer)" #LightCoral {
+    class adminWindow <<Admin Console>> {
+        - ui: Ui::adminWindow*
+        - controller: Controller*
+        - currentAdmin: QString
+        --
+        + adminWindow(QWidget* parent = nullptr)
+        + ~adminWindow()
+        + setController(Controller* ctrl): void
+        + setAdminInfo(QString adminName): void
+        + refreshInterface(): void
+        --
+        signals:
+        + accountListRequested(): void
+        + addAccountRequested(): void
+        + resetPasswordRequested(): void
+        + changeStatusRequested(): void
+        + logoutRequested(): void
+        --
+        private slots:
+        + on_accountListButton_clicked(): void
+        + on_addAccountButton_clicked(): void
+        + on_resetPasswordButton_clicked(): void
+        + on_changeStatusButton_clicked(): void
+        + on_logoutButton_clicked(): void
+    }
+
+    class acclistWindow <<Account List Manager>> {
+        - ui: Ui::acclistWindow*
+        - controller: Controller*
+        - accountModel: QStandardItemModel*
+        - selectedAccount: QString
+        --
+        + acclistWindow(QWidget* parent = nullptr)
+        + ~acclistWindow()
+        + setController(Controller* ctrl): void
+        + loadAccountList(): void
+        + refreshAccountList(): void
+        + selectAccount(QString account): void
+        + deleteSelectedAccount(): void
+        --
+        signals:
+        + accountSelected(QString account): void
+        + accountDeleted(QString account): void
+        + backToAdmin(): void
+        --
+        private slots:
+        + on_refreshButton_clicked(): void
+        + on_deleteButton_clicked(): void
+        + on_backButton_clicked(): void
+        + on_tableView_clicked(QModelIndex index): void
+    }
+
+    class addaccWindow <<Add Account Manager>> {
+        - ui: Ui::addaccWindow*
+        - controller: Controller*
+        - isValidInput: bool
+        --
+        + addaccWindow(QWidget* parent = nullptr)
+        + ~addaccWindow()
+        + setController(Controller* ctrl): void
+        + resetForm(): void
+        + validateAllInputs(): bool
+        + createNewAccount(): bool
+        --
+        signals:
+        + accountAdded(QString account): void
+        + backToAdmin(): void
+        --
+        private slots:
+        + on_confirmButton_clicked(): void
+        + on_cancelButton_clicked(): void
+        + on_accountLineEdit_textChanged(): void
+        + on_passwordLineEdit_textChanged(): void
+        + on_balanceSpinBox_valueChanged(): void
+        + validateAccountFormat(): void
+        + validatePasswordStrength(): void
+        + validateBalance(): void
+    }
+
+    class setpasswordWindow <<Password Reset Manager>> {
+        - ui: Ui::setpasswordWindow*
+        - controller: Controller*
+        - targetAccount: QString
+        - newPassword: QString
+        --
+        + setpasswordWindow(QWidget* parent = nullptr)
+        + ~setpasswordWindow()
+        + setController(Controller* ctrl): void
+        + setTargetAccount(QString account): void
+        + resetPasswordForm(): void
+        + updatePassword(): bool
+        --
+        signals:
+        + passwordUpdated(QString account): void
+        + backToAdmin(): void
+        --
+        private slots:
+        + on_confirmButton_clicked(): void
+        + on_cancelButton_clicked(): void
+        + on_accountLineEdit_textChanged(): void
+        + on_newPasswordLineEdit_textChanged(): void
+        + on_confirmPasswordLineEdit_textChanged(): void
+        + validatePasswordMatch(): void
+        + generateRandomPassword(): void
+    }
+
+    class setstatusWindow <<Status Change Manager>> {
+        - ui: Ui::setstatusWindow*
+        - controller: Controller*
+        - targetAccount: QString
+        - newStatus: int
+        --
+        + setstatusWindow(QWidget* parent = nullptr)
+        + ~setstatusWindow()
+        + setController(Controller* ctrl): void
+        + setTargetAccount(QString account): void
+        + loadCurrentStatus(): void
+        + updateAccountStatus(): bool
+        --
+        signals:
+        + statusUpdated(QString account, int status): void
+        + backToAdmin(): void
+        --
+        private slots:
+        + on_activeRadioButton_toggled(): void
+        + on_suspendedRadioButton_toggled(): void
+        + on_frozenRadioButton_toggled(): void
+        + on_confirmButton_clicked(): void
+        + on_cancelButton_clicked(): void
+    }
+}
+
+' ===== 用戶功能層 =====
+package "用戶功能層 (User Layer)" #LightSkyBlue {
+    class userwindow <<User Console>> {
+        - ui: Ui::userwindow*
+        - controller: Controller*
+        - currentUser: QString
+        - currentBalance: double
+        - sessionTimer: QTimer*
+        - timeoutWarning: QTimer*
+        --
+        + userwindow(QWidget* parent = nullptr)
+        + ~userwindow()
+        + setController(Controller* ctrl): void
+        + setUserInfo(QString user, double balance): void
+        + updateBalance(double newBalance): void
+        + startSessionTimer(): void
+        + resetSessionTimer(): void
+        + showTimeoutWarning(): void
+        --
+        signals:
+        + depositRequested(): void
+        + withdrawRequested(): void
+        + transferRequested(): void
+        + transactionHistoryRequested(): void
+        + changePasswordRequested(): void
+        + logoutRequested(): void
+        + sessionTimeout(): void
+        --
+        private slots:
+        + on_depositButton_clicked(): void
+        + on_withdrawButton_clicked(): void
+        + on_transferButton_clicked(): void
+        + on_historyButton_clicked(): void
+        + on_changePasswordButton_clicked(): void
+        + on_logoutButton_clicked(): void
+        + handleSessionTimeout(): void
+        + handleTimeoutWarning(): void
+    }
+
+    class depositWindow <<Deposit Processor>> {
+        - ui: Ui::depositWindow*
+        - controller: Controller*
+        - currentUser: QString
+        - currentBalance: double
+        - depositAmount: double
+        - isValidAmount: bool
+        --
+        + depositWindow(QWidget* parent = nullptr)
+        + ~depositWindow()
+        + setController(Controller* ctrl): void
+        + setUserInfo(QString user, double balance): void
+        + resetDepositForm(): void
+        + validateDepositAmount(): bool
+        + processDeposit(): bool
+        + calculateNewBalance(): double
+        --
+        signals:
+        + showSummary(QString type, double amount, double newBalance): void
+        + backToUser(): void
+        --
+        private slots:
+        + on_amount100Button_clicked(): void
+        + on_amount500Button_clicked(): void
+        + on_amount1000Button_clicked(): void
+        + on_amount5000Button_clicked(): void
+        + on_customAmountSpinBox_valueChanged(): void
+        + on_confirmButton_clicked(): void
+        + on_cancelButton_clicked(): void
+        + validateCustomAmount(): void
+    }
+
+    class withdrowWindow <<Withdraw Processor>> {
+        - ui: Ui::withdrowWindow*
+        - controller: Controller*
+        - currentUser: QString
+        - currentBalance: double
+        - withdrawAmount: double
+        - isValidAmount: bool
+        --
+        + withdrowWindow(QWidget* parent = nullptr)
+        + ~withdrowWindow()
+        + setController(Controller* ctrl): void
+        + setUserInfo(QString user, double balance): void
+        + resetWithdrawForm(): void
+        + validateWithdrawAmount(): bool
+        + checkSufficientBalance(): bool
+        + processWithdraw(): bool
+        + calculateNewBalance(): double
+        --
+        signals:
+        + showSummary(QString type, double amount, double newBalance): void
+        + backToUser(): void
+        --
+        private slots:
+        + on_amount100Button_clicked(): void
+        + on_amount500Button_clicked(): void
+        + on_amount1000Button_clicked(): void
+        + on_amount3000Button_clicked(): void
+        + on_amount5000Button_clicked(): void
+        + on_customAmountSpinBox_valueChanged(): void
+        + on_confirmButton_clicked(): void
+        + on_cancelButton_clicked(): void
+        + validateCustomAmount(): void
+        + showInsufficientFunds(): void
+    }
+
+    class TransWindow <<Transfer Processor>> {
+        - ui: Ui::TransWindow*
+        - controller: Controller*
+        - sourceUser: QString
+        - sourceBalance: double
+        - targetAccount: QString
+        - transferAmount: double
+        - isValidTarget: bool
+        - isValidAmount: bool
+        --
+        + TransWindow(QWidget* parent = nullptr)
+        + ~TransWindow()
+        + setController(Controller* ctrl): void
+        + setUserInfo(QString user, double balance): void
+        + resetTransferForm(): void
+        + validateTargetAccount(): bool
+        + validateTransferAmount(): bool
+        + checkSufficientBalance(): bool
+        + processTransfer(): bool
+        + calculateNewBalance(): double
+        --
+        signals:
+        + showSummary(QString type, double amount, double newBalance): void
+        + backToUser(): void
+        --
+        private slots:
+        + on_targetAccountLineEdit_textChanged(): void
+        + on_amountSpinBox_valueChanged(): void
+        + on_confirmButton_clicked(): void
+        + on_cancelButton_clicked(): void
+        + validateTargetExists(): void
+        + validateTransferLimit(): void
+        + showTransferError(QString message): void
+    }
+}
+
+' ===== 用戶服務層 =====
+package "用戶服務層 (User Service Layer)" #LightYellow {
+    class changepasswordWindow <<Password Changer>> {
+        - ui: Ui::changepasswordWindow*
+        - controller: Controller*
+        - currentUser: QString
+        - oldPassword: QString
+        - newPassword: QString
+        - confirmPassword: QString
+        - isValidOld: bool
+        - isValidNew: bool
+        - isPasswordMatch: bool
+        --
+        + changepasswordWindow(QWidget* parent = nullptr)
+        + ~changepasswordWindow()
+        + setController(Controller* ctrl): void
+        + setUserInfo(QString user): void
+        + resetPasswordForm(): void
+        + validateOldPassword(): bool
+        + validateNewPassword(): bool
+        + validatePasswordMatch(): bool
+        + updatePassword(): bool
+        --
+        signals:
+        + passwordChanged(): void
+        + backToUser(): void
+        --
+        private slots:
+        + on_oldPasswordLineEdit_textChanged(): void
+        + on_newPasswordLineEdit_textChanged(): void
+        + on_confirmPasswordLineEdit_textChanged(): void
+        + on_confirmButton_clicked(): void
+        + on_cancelButton_clicked(): void
+        + checkPasswordStrength(): void
+        + showPasswordMismatch(): void
+    }
+
+    class docuWindow <<Transaction History>> {
+        - ui: Ui::docuWindow*
+        - controller: Controller*
+        - currentUser: QString
+        - transactionModel: QStandardItemModel*
+        - historyList: QList<TransactionInfo>
+        --
+        + docuWindow(QWidget* parent = nullptr)
+        + ~docuWindow()
+        + setController(Controller* ctrl): void
+        + setUserInfo(QString user): void
+        + loadTransactionHistory(): void
+        + refreshHistory(): void
+        + formatTransactionDisplay(): void
+        + exportToFile(): void
+        --
+        signals:
+        + backToUser(): void
+        --
+        private slots:
+        + on_refreshButton_clicked(): void
+        + on_exportButton_clicked(): void
+        + on_backButton_clicked(): void
+        + on_tableView_doubleClicked(QModelIndex index): void
+        + showTransactionDetails(TransactionInfo transaction): void
+    }
+
+    class summarywindow <<Transaction Summary>> {
+        - ui: Ui::summarywindow*
+        - controller: Controller*
+        - transactionType: QString
+        - transactionAmount: double
+        - newBalance: double
+        - transactionId: QString
+        - transactionTime: QDateTime
+        --
+        + summarywindow(QWidget* parent = nullptr)
+        + ~summarywindow()
+        + setController(Controller* ctrl): void
+        + setTransactionInfo(QString type, double amount, double balance): void
+        + displaySummary(): void
+        + printReceipt(): void
+        + generateTransactionId(): QString
+        --
+        signals:
+        + continueTransaction(): void
+        + finishTransaction(): void
+        + backToUser(): void
+        --
+        private slots:
+        + on_continueButton_clicked(): void
+        + on_finishButton_clicked(): void
+        + on_printButton_clicked(): void
+        + on_backButton_clicked(): void
+        + showTransactionComplete(): void
+    }
+}
+
+' ===== 資料模型層 =====
+package "資料模型層 (Data Model Layer)" #LightPink {
+    class AccountInfo <<Data Model>> {
+        + account: QString
+        + balance: double
+        + status: int
+        + createDate: QDateTime
+        + lastLogin: QDateTime
+        --
+        + AccountInfo()
+        + AccountInfo(QString acc, double bal, int stat)
+        + isActive(): bool
+        + isSuspended(): bool
+        + isFrozen(): bool
+        + getStatusString(): QString
+    }
+
+    class TransactionInfo <<Data Model>> {
+        + transactionId: QString
+        + account: QString
+        + type: QString
+        + amount: double
+        + balance: double
+        + timestamp: QDateTime
+        + description: QString
+        --
+        + TransactionInfo()
+        + TransactionInfo(QString id, QString acc, QString t, double amt)
+        + isDeposit(): bool
+        + isWithdraw(): bool
+        + isTransfer(): bool
+        + formatAmount(): QString
+        + formatTimestamp(): QString
+    }
+
+    class UserSession <<Session Model>> {
+        + userId: QString
+        + loginTime: QDateTime
+        + lastActivity: QDateTime
+        + isAdmin: bool
+        + isActive: bool
+        + timeoutDuration: int
+        --
+        + UserSession()
+        + UserSession(QString user, bool admin)
+        + updateActivity(): void
+        + isExpired(): bool
+        + getRemainingTime(): int
+        + extendSession(): void
+        + terminateSession(): void
+    }
+}
+
+' ===== 核心關係 =====
+Controller *-- loginWindow
+Controller *-- adminWindow
+Controller *-- userwindow
+Controller *-- DatabaseManager
+
+' ===== 管理員關係 =====
+Controller *-- acclistWindow
+Controller *-- addaccWindow
+Controller *-- setpasswordWindow
+Controller *-- setstatusWindow
+
+adminWindow -.-> acclistWindow : "帳戶列表"
+adminWindow -.-> addaccWindow : "新增帳戶"
+adminWindow -.-> setpasswordWindow : "重設密碼"
+adminWindow -.-> setstatusWindow : "變更狀態"
+
+' ===== 用戶關係 =====
+Controller *-- depositWindow
+Controller *-- withdrowWindow
+Controller *-- TransWindow
+Controller *-- changepasswordWindow
+Controller *-- docuWindow
+Controller *-- summarywindow
+
+userwindow -.-> depositWindow : "存款"
+userwindow -.-> withdrowWindow : "提款"
+userwindow -.-> TransWindow : "轉帳"
+userwindow -.-> docuWindow : "歷史查詢"
+userwindow -.-> changepasswordWindow : "修改密碼"
+
+' ===== 交易摘要關係 =====
+depositWindow -.-> summarywindow : "存款完成"
+withdrowWindow -.-> summarywindow : "提款完成"
+TransWindow -.-> summarywindow : "轉帳完成"
+
+' ===== 資料庫存取關係 =====
+acclistWindow --> DatabaseManager : "查詢帳戶"
+addaccWindow --> DatabaseManager : "新增帳戶"
+setpasswordWindow --> DatabaseManager : "更新密碼"
+setstatusWindow --> DatabaseManager : "更新狀態"
+depositWindow --> DatabaseManager : "存款交易"
+withdrowWindow --> DatabaseManager : "提款交易"
+TransWindow --> DatabaseManager : "轉帳交易"
+changepasswordWindow --> DatabaseManager : "密碼變更"
+docuWindow --> DatabaseManager : "歷史查詢"
+loginWindow --> DatabaseManager : "身份驗證"
+
+' ===== 資料模型關係 =====
+DatabaseManager ..> AccountInfo : "使用"
+DatabaseManager ..> TransactionInfo : "使用"
+Controller ..> UserSession : "使用"
+
+' ===== 系統架構說明 =====
+note top of Controller
+  **ATM系統核心控制器**
+  • 統一管理所有視窗生命週期
+  • 協調管理員與用戶模式切換
+  • 處理會話超時與安全機制
+  • 維護系統狀態一致性
+end note
+
+note right of DatabaseManager
+  **資料庫管理層**
+  • SQLite 本地資料庫
+  • 交易原子性保證
+  • 密碼 SHA-256 加密
+  • 參數化查詢防注入
+  • 5層交易歷史追蹤
+end note
+
+note bottom of summarywindow
+  **交易確認機制**
+  • 統一交易摘要介面
+  • 即時餘額更新顯示
+  • 交易記錄生成
+  • 列印收據功能
+  • 用戶操作確認
+end note
+
+@enduml

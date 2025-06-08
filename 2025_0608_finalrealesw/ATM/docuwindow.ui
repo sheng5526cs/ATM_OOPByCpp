@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>docuWindow</class>
+ <widget class="QMainWindow" name="docuWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1280</width>
+    <height>680</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>交易紀錄查詢</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow {
+    background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 1,
+                                 stop: 0 #add8e6, stop: 1 #7bb3d9);
+}
+</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">QWidget {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #c3e2f0, stop: 1 #87ceeb);
+    font-family: &quot;Microsoft YaHei UI&quot;;
+    color: #212529;
+}
+QWidget[class=&quot;QWidget&quot;] {
+    background: transparent;
+}
+</string>
+   </property>
+   <widget class="QLabel" name="label_title">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>20</y>
+      <width>870</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>ForbiddenCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+    font: bold 24pt &quot;Microsoft YaHei UI&quot;;
+    color: #ffffff;
+    background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+                                 stop: 0 #667eea, stop: 1 #764ba2);
+    border-radius: 12px;
+    padding: 15px;
+    margin: 5px;
+}
+</string>
+    </property>
+    <property name="text">
+     <string>交 易 紀 錄 查 詢</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_account">
+    <property name="geometry">
+     <rect>
+      <x>960</x>
+      <y>30</y>
+      <width>251</width>
+      <height>90</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>ForbiddenCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+    font: bold 18pt &quot;Microsoft YaHei UI&quot;;
+    color: #495057;
+    background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 1,
+                                 stop: 0 #ffbf00, stop: 1 #ffecb3);
+    border-radius: 12px;
+    padding: 10px;
+}
+</string>
+    </property>
+    <property name="text">
+     <string>帳號：12345678</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_balance">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>160</y>
+      <width>761</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>WaitCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+    font: bold 14pt &quot;Microsoft YaHei UI&quot;;
+    color: #495057;
+    background: #fffbe6;
+    border-radius: 8px;
+    padding: 6px 12px;
+}
+</string>
+    </property>
+    <property name="text">
+     <string>目前餘額:尚未連接</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QWidget" name="tableBgWidget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>220</y>
+      <width>860</width>
+      <height>300</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QWidget { background: #fff; border-radius: 18px; }</string>
+    </property>
+    <widget class="QTableWidget" name="tableWidget">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>860</width>
+       <height>300</height>
+      </rect>
+     </property>
+     <property name="cursor" stdset="0">
+      <cursorShape>CrossCursor</cursorShape>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QTableWidget {
+    font: 13pt 'Microsoft YaHei UI';
+    background: #fff;
+    border-radius: 18px;
+    border: 2px solid #ced4da;
+    padding: 8px;
+    margin: 0px;
+}
+QTableCornerButton::section {
+    background: #fff;
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+    border-bottom-left-radius: 18px;
+    border-bottom-right-radius: 18px;
+}
+QHeaderView::section {
+    background: #ffe066;
+    font: bold 13pt 'Microsoft YaHei UI';
+    border-radius: 8px;
+    padding: 6px;
+}
+</string>
+     </property>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
+     </property>
+     <property name="showGrid">
+      <bool>false</bool>
+     </property>
+     <property name="rowCount">
+      <number>0</number>
+     </property>
+     <property name="columnCount">
+      <number>3</number>
+     </property>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>false</bool>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>時間</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>金額</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>餘額</string>
+      </property>
+     </column>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget_3">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>570</y>
+      <width>431</width>
+      <height>80</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QPushButton" name="back">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    font: bold 14pt &quot;Microsoft YaHei UI&quot;;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #ffffff, stop: 1 #f8f9fa);
+    border: 2px solid #007bff;
+    border-radius: 12px;
+    color: #007bff;
+    padding: 12px 20px;
+    min-height: 20px;
+}
+QPushButton:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #007bff, stop: 1 #0056b3);
+    color: white;
+    border: 2px solid #0056b3;
+}
+QPushButton:pressed {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #0056b3, stop: 1 #004085);
+}
+QPushButton:disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+    border: 2px solid #dee2e6;
+}
+</string>
+       </property>
+       <property name="text">
+        <string>上一頁</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Policy::Preferred</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="logout">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">
+QPushButton {
+    font: bold 14pt &quot;Microsoft YaHei UI&quot;;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #ff6b6b, stop: 1 #ee5a52);
+    border: 2px solid #dc3545;
+    color: white;
+    border-radius: 12px;
+    padding: 12px 20px;
+    min-height: 20px;
+}
+QPushButton:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #dc3545, stop: 1 #c82333);
+}
+</string>
+       </property>
+       <property name="text">
+        <string>登出</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

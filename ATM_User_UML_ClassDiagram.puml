@@ -1,0 +1,319 @@
+@startuml ATM_User_Complete_ClassDiagram
+!theme plain
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+title ATM System - Complete User Functionality UML Class Diagram
+note as N1
+  **ATM普通用戶功能完整類圖**
+  包含所有用戶操作相關的類、屬性、方法和關係
+  涵蓋存款、提款、轉帳、密碼變更、交易紀錄查詢等功能
+end note
+
+package "User Interface Layer" {
+    class userwindow {
+        -ui: Ui::userwindow*
+        +userwindow(parent: QWidget*)
+        +~userwindow()
+        +setWelcomeText(name: QString): void
+        
+        ' Slots
+        -on_logout_clicked(): void
+        -on_changepass_clicked(): void
+        -on_deposit_clicked(): void
+        -on_withdrow_clicked(): void
+        -on_trans_clicked(): void
+        -on_docu_clicked(): void
+        -on_idk_clicked(): void
+        
+        ' Signals
+        +logout(): signal
+        +changepass(): signal
+        +deposit(): signal
+        +withdraw(): signal
+        +transfer(): signal
+        +transactionHistory(): signal
+    }
+    
+    class depositWindow {
+        -ui: Ui::depositWindow*
+        -dbm: DatabaseManager
+        +depositWindow(parent: QWidget*)
+        +~depositWindow()
+        +refreshBalance(): void
+        
+        ' Slots
+        -on_clear_clicked(): void
+        -on_deposit_btn_clicked(): void
+        -on_back_clicked(): void
+        -on_logout_clicked(): void
+        
+        ' Signals
+        +back(): signal
+        +logout(): signal
+        +showSummary(type: QString, amount: int, target: QString, balance: double): signal
+    }
+    
+    class withdrowWindow {
+        -ui: Ui::withdrowWindow*
+        -dbm: DatabaseManager
+        +withdrowWindow(parent: QWidget*)
+        +~withdrowWindow()
+        +refreshBalance(): void
+        +withdraw(amount: int): void
+        -updateQuickButtons(): void
+        
+        ' Quick amount slots
+        -on_f500_clicked(): void
+        -on_f1000_clicked(): void
+        -on_f2000_clicked(): void
+        -on_f3000_clicked(): void
+        -on_f5000_clicked(): void
+        -on_f10000_clicked(): void
+        -on_f20000_clicked(): void
+        -on_fAllBalance_clicked(): void
+        -on_fHalfBalance_clicked(): void
+        
+        ' Control slots
+        -on_clear_clicked(): void
+        -on_withdraw_clicked(): void
+        -on_back_clicked(): void
+        -on_logout_clicked(): void
+        
+        ' Signals
+        +back(): signal
+        +logout(): signal
+        +showSummary(type: QString, amount: int, target: QString, balance: double): signal
+    }
+    
+    class TransWindow {
+        -ui: Ui::TransWindow*
+        +TransWindow(parent: QWidget*)
+        +~TransWindow()
+        +refreshBalance(): void
+        
+        ' Slots
+        +on_trans_btn_clicked(): void
+        +on_clear_clicked(): void
+        +on_back_clicked(): void
+        +on_logout_clicked(): void
+        
+        ' Signals
+        +back(): signal
+        +logout(): signal
+        +showSummary(type: QString, amount: int, target: QString, balance: double): signal
+    }
+    
+    class changepasswordWindow {
+        -ui: Ui::changepasswordWindow*
+        +changepasswordWindow(parent: QWidget*)
+        +~changepasswordWindow()
+        
+        ' Slots
+        -on_back_clicked(): void
+        -on_logout_clicked(): void
+        -on_clear_clicked(): void
+        -on_check_clicked(): void
+        
+        ' Signals
+        +back(): signal
+        +logout(): signal
+    }
+    
+    class docuWindow {
+        -ui: Ui::docuWindow*
+        -dbm: DatabaseManager
+        +docuWindow(parent: QWidget*)
+        +~docuWindow()
+        +setAccountAndBalance(account: QString, balance: double): void
+        +refreshTable(account: QString): void
+        
+        ' Slots
+        -on_back_clicked(): void
+        -on_logout_clicked(): void
+        
+        ' Signals
+        +back(): signal
+        +logout(): signal
+    }
+    
+    class summarywindow {
+        -ui: Ui::summarywindow*
+        +summarywindow(parent: QWidget*)
+        +~summarywindow()
+        +setSummary(type: QString, amount: int, target: QString, balance: double): void
+        
+        ' Slots
+        -on_back_clicked(): void
+        -on_logout_clicked(): void
+        
+        ' Signals
+        +back(): signal
+        +logout(): signal
+    }
+}
+
+package "Business Logic Layer" {
+    class Controller <<Singleton>> {
+        {static} -currentAccount: QString
+        {static} -currentBalance: double
+        {static} -sessionTimer: QTimer*
+        {static} -sessionTimeout: int
+        
+        {static} +Getaccount(): QString
+        {static} +Setaccount(account: QString): void
+        {static} +Getbalance(): double
+        {static} +Setbalance(balance: double): void
+        {static} +startSession(): void
+        {static} +stopSession(): void
+        {static} +resetSessionTimer(): void
+        
+        ' Window management
+        +userwindow: userwindow*
+        +depositWindow: depositWindow*
+        +withdrawWindow: withdrowWindow*
+        +transferWindow: TransWindow*
+        +changePasswordWindow: changepasswordWindow*
+        +documentWindow: docuWindow*
+        +summaryWindow: summarywindow*
+        
+        ' Window control methods
+        +showUserWindow(): void
+        +showDepositWindow(): void
+        +showWithdrawWindow(): void
+        +showTransferWindow(): void
+        +showChangePasswordWindow(): void
+        +showDocumentWindow(): void
+        +showSummaryWindow(): void
+        +backToUserWindow(): void
+        +logoutFromUser(): void
+    }
+}
+
+package "Data Access Layer" {
+    class DatabaseManager {
+        -db: QSqlDatabase
+        +DatabaseManager()
+        +~DatabaseManager()
+        +connect(): bool
+        +disconnect(): void
+        
+        ' User transaction methods
+        +updateUserBalance(account: QString, newBalance: double): bool
+        +insertTransactionHistory(account: QString, amount: double, balance: double, time: QString): bool
+        +getTransactionHistory(account: QString): QList<TransactionRecord>
+        +validateTargetAccount(account: QString): bool
+        +transferMoney(fromAccount: QString, toAccount: QString, amount: double): bool
+        +changeUserPassword(account: QString, oldPassword: QString, newPassword: QString): bool
+    }
+    
+    class TransactionRecord {
+        +account: QString
+        +amount: double
+        +balance: double
+        +timestamp: QString
+        +type: QString
+        +target: QString
+    }
+}
+
+package "Qt Framework" {
+    class QMainWindow {
+        ' Qt base class
+    }
+    
+    class QObject {
+        ' Qt base class for signals/slots
+    }
+    
+    class QSqlDatabase {
+        ' Qt SQL database
+    }
+    
+    class QTimer {
+        ' Qt timer for session management
+    }
+}
+
+' Inheritance relationships
+userwindow --|> QMainWindow
+depositWindow --|> QMainWindow
+withdrowWindow --|> QMainWindow
+TransWindow --|> QMainWindow
+changepasswordWindow --|> QMainWindow
+docuWindow --|> QMainWindow
+summarywindow --|> QMainWindow
+
+' Composition relationships
+userwindow *-- "ui" Ui::userwindow
+depositWindow *-- "ui" Ui::depositWindow
+depositWindow *-- "dbm" DatabaseManager
+withdrowWindow *-- "ui" Ui::withdrowWindow
+withdrowWindow *-- "dbm" DatabaseManager
+TransWindow *-- "ui" Ui::TransWindow
+changepasswordWindow *-- "ui" Ui::changepasswordWindow
+docuWindow *-- "ui" Ui::docuWindow
+docuWindow *-- "dbm" DatabaseManager
+summarywindow *-- "ui" Ui::summarywindow
+
+' Controller relationships
+Controller *-- "userwindow" userwindow
+Controller *-- "depositWindow" depositWindow
+Controller *-- "withdrawWindow" withdrowWindow
+Controller *-- "transferWindow" TransWindow
+Controller *-- "changePasswordWindow" changepasswordWindow
+Controller *-- "documentWindow" docuWindow
+Controller *-- "summaryWindow" summarywindow
+Controller *-- "sessionTimer" QTimer
+
+' Database relationships
+DatabaseManager --> QSqlDatabase : uses
+DatabaseManager ..> TransactionRecord : creates
+
+' Signal-Slot connections (major ones)
+userwindow .right.> Controller : signals
+depositWindow .up.> Controller : signals
+withdrowWindow .up.> Controller : signals
+TransWindow .up.> Controller : signals
+changepasswordWindow .up.> Controller : signals
+docuWindow .up.> Controller : signals
+summarywindow .up.> Controller : signals
+
+' Transaction flow connections
+depositWindow ..> summarywindow : showSummary
+withdrowWindow ..> summarywindow : showSummary
+TransWindow ..> summarywindow : showSummary
+
+note right of Controller
+  **Controller 管理所有用戶窗口**
+  - 處理窗口間的導航
+  - 管理用戶會話狀態
+  - 維護當前帳戶和餘額信息
+  - 90秒會話超時控制
+end note
+
+note right of DatabaseManager
+  **數據庫操作類**
+  - 處理所有用戶交易的資料庫操作
+  - 維護交易歷史記錄（5層深度）
+  - 支援餘額更新、轉帳、密碼變更
+  - 使用參數化查詢防止SQL注入
+end note
+
+note bottom of TransWindow
+  **轉帳功能支援**
+  - 驗證目標帳戶存在性
+  - 原子性交易操作
+  - 同時更新雙方餘額和歷史
+  - 使用資料庫交易確保一致性
+end note
+
+note bottom of withdrowWindow
+  **提款功能特色**
+  - 快速金額按鈕（500-20000元）
+  - 提光餘額和半額提取功能
+  - 根據餘額動態調整按鈕狀態
+  - 餘額不足檢查
+end note
+
+@enduml

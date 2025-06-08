@@ -1,0 +1,136 @@
+@startuml ATM Administrator Core Architecture
+!theme plain
+skinparam classAttributeIconSize 0
+skinparam classFontSize 11
+
+title ATM系統管理員核心架構圖\n(Administrator Core Architecture)
+
+' ===== 核心控制器 =====
+class Controller <<Central Controller>> {
+    - adminwin: adminwindow*
+    - acclist: acclistWindow*
+    - addacc: addaccwindow*
+    - spw: setpasswordwindow*
+    - ssw: setstatuswindow*
+    - dbm: DatabaseManager
+    - sessionTimer: QTimer*
+    --
+    + 管理所有管理員視窗生命週期
+    + 處理管理員認證與會話管理
+    + 協調信號槽連接
+}
+
+' ===== 管理員主控台 =====
+class adminwindow <<Administrator Console>> {
+    --
+    + 管理員操作主介面
+    --
+    + logout(): signal
+    + Accountlist(): signal
+    + addaccountwindow(): signal
+    + passwordsetting(): signal
+    + statuschange(): signal
+}
+
+' ===== 帳戶管理模組 =====
+package "帳戶管理模組" {
+    class acclistWindow <<Account List Viewer>> {
+        - model: QSqlTableModel*
+        --
+        + loadAccounts(): void
+        + refresh(): void
+        --
+        顯示所有帳戶列表
+        支援即時更新
+    }
+
+    class addaccwindow <<Account Creator>> {
+        --
+        + 新增使用者帳戶
+        + 驗證帳戶資料
+        + 設定初始餘額
+    }
+}
+
+' ===== 系統管理模組 =====
+package "系統管理模組" {
+    class setpasswordwindow <<Password Manager>> {
+        --
+        + 重設使用者密碼
+        + SHA-256密碼加密
+        + 安全性驗證
+    }
+
+    class setstatuswindow <<Status Manager>> {
+        --
+        + 變更帳戶狀態
+        + 啟用/停用帳戶
+        + 鎖定/解鎖功能
+    }
+}
+
+' ===== 資料庫管理 =====
+class DatabaseManager <<Database Layer>> {
+    --
+    + fetchPassword(): int
+    + fetchUserData(): bool
+    + status(): void
+    --
+    管理員認證狀態:
+    500: 管理員帳戶
+    501: 已認證管理員
+}
+
+' ===== 認證層 =====
+class loginWindow <<Authentication>> {
+    --
+    + adminpress(): signal
+    --
+    管理員專用登入
+    雙重認證機制
+}
+
+' ===== 核心關係 =====
+Controller *-- adminwindow
+Controller *-- acclistWindow  
+Controller *-- addaccwindow
+Controller *-- setpasswordwindow
+Controller *-- setstatuswindow
+Controller *-- DatabaseManager
+Controller <-- loginWindow : "管理員認證"
+
+' ===== 功能流程 =====
+adminwindow -.-> acclistWindow : "查看帳戶"
+adminwindow -.-> addaccwindow : "新增帳戶"
+adminwindow -.-> setpasswordwindow : "重設密碼"
+adminwindow -.-> setstatuswindow : "變更狀態"
+
+' ===== 資料存取 =====
+acclistWindow --> DatabaseManager : "查詢"
+addaccwindow --> DatabaseManager : "新增"
+setpasswordwindow --> DatabaseManager : "更新"
+setstatuswindow --> DatabaseManager : "修改"
+
+' ===== 管理員操作流程說明 =====
+note right of Controller
+  **管理員操作流程:**
+  1. 管理員登入認證 (status 501)
+  2. 進入管理員主控台
+  3. 選擇管理功能:
+     • 帳戶列表查看
+     • 新增使用者帳戶  
+     • 重設使用者密碼
+     • 變更帳戶狀態
+  4. 90秒會話超時管理
+  5. 安全登出
+end note
+
+note bottom of DatabaseManager
+  **安全機制:**
+  • SHA-256密碼加密
+  • 參數化SQL查詢
+  • 狀態碼權限控制
+  • 會話超時保護
+end note
+
+@enduml

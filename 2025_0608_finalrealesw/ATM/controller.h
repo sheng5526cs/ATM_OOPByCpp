@@ -19,6 +19,8 @@ class withdrowWindow; // 前向宣告 withdrowWindow
 class docuWindow; // 前向宣告 docuWindow
 class depositWindow;
 class TransWindow; // 前向宣告
+class PPTwindow; // 前向宣告 PPTwindow
+class ThanksForListeningWindow; // 前向宣告 ThanksForListeningWindow
 
 class Controller : public QObject
 {
@@ -58,6 +60,8 @@ private:
     depositWindow *depositwin; // 新增：存款視窗
     TransWindow *transwin; // 新增：轉帳視窗
     summarywindow *summaryWin; // 新增 summarywindow 指標
+    PPTwindow *pptWin; // 新增：PPT 視窗
+    ThanksForListeningWindow *thanksWin; // 新增：感謝收聽視窗
 
     // 會話超時計時器
     QTimer *sessionTimer;       // 會話計時器 (90秒)

@@ -1,0 +1,293 @@
+@startuml ATM Administrator System Class Diagram
+!theme plain
+skinparam classAttributeIconSize 0
+skinparam classFontSize 10
+skinparam packageStyle rectangle
+
+title ATM系統管理員功能類別圖\n(Administrator Functionality Class Diagram)
+
+' ===== 核心控制器類別 =====
+package "Core Controller" {
+    class Controller {
+        - loginWin: loginWindow*
+        - userWin: userwindow*
+        - adminwin: adminwindow*
+        - acclist: acclistWindow*
+        - addacc: addaccwindow*
+        - spw: setpasswordwindow*
+        - ssw: setstatuswindow*
+        - changepw: changepasswordWindow*
+        - sessionTimer: QTimer*
+        - sessionActive: bool
+        - {static} id: QString
+        - {static} account: QString
+        - {static} balance: double
+        - dbm: DatabaseManager
+        --
+        + Controller(parent: QObject*)
+        + start(): void
+        + {static} Getid(): QString
+        + {static} Getaccount(): QString
+        + {static} Getbalance(): double
+        + {static} Setid(id: QString): void
+        + {static} Setaccount(account: QString): void
+        + {static} Setbalance(balance: double): void
+        + resetSessionTimer(): void
+        + handleSessionTimeout(): void
+        --
+        - onSessionTimeout(): void
+    }
+}
+
+' ===== 管理員認證類別 =====
+package "Administrator Authentication" {
+    class loginWindow {
+        - ui: Ui::loginWindow*
+        --
+        + loginWindow(parent: QWidget*)
+        + ~loginWindow()
+        + clearPassword(): void
+        + setupUIEnhancements(): void
+        + validateInput(account: QString, password: QString): bool
+        + showEnhancedError(title: QString, message: QString): void
+        --
+        - on_LoginButton_clicked(): void
+        - on_adminloginButton_clicked(): void
+        --
+        + loginPress(account: QString, password: QString, isAdmin: bool): signal
+        + adminpress(account: QString, password: QString): signal
+    }
+}
+
+' ===== 管理員主視窗類別 =====
+package "Administrator Main Interface" {
+    class adminwindow {
+        - ui: Ui::adminwindow*
+        --
+        + adminwindow(parent: QWidget*)
+        + ~adminwindow()
+        --
+        - on_logout_clicked(): void
+        - on_AccountlistButton_clicked(): void
+        - on_AddAccountButton_clicked(): void
+        - on_ResetpasswordButton_clicked(): void
+        - on_ChangestatusButton_clicked(): void
+        - on_aOtherBotton_clicked(): void
+        --
+        + logout(): signal
+        + Accountlist(): signal
+        + addaccountwindow(): signal
+        + passwordsetting(): signal
+        + statuschange(): signal
+    }
+}
+
+' ===== 帳戶管理類別 =====
+package "Account Management" {
+    class acclistWindow {
+        - ui: Ui::acclistWinow*
+        - model: QSqlTableModel*
+        --
+        + acclistWindow(parent: QWidget*)
+        + ~acclistWindow()
+        + loadAccounts(): void
+        + refresh(): void
+        --
+        - on_logout_clicked(): void
+        - on_back_clicked(): void
+        --
+        + back(): signal
+        + logout(): signal
+    }
+
+    class addaccwindow {
+        - ui: Ui::addaccwindow*
+        --
+        + addaccwindow(parent: QWidget*)
+        + ~addaccwindow()
+        --
+        - on_back_clicked(): void
+        - on_logout_clicked(): void
+        - on_clear_clicked(): void
+        - on_add_clicked(): void
+        --
+        + back(): signal
+        + logout(): signal
+    }
+}
+
+' ===== 密碼與狀態管理類別 =====
+package "Password & Status Management" {
+    class setpasswordwindow {
+        - ui: Ui::setpasswordwindow*
+        --
+        + setpasswordwindow(parent: QWidget*)
+        + ~setpasswordwindow()
+        --
+        - on_back_clicked(): void
+        - on_logout_clicked(): void
+        - on_change_clicked(): void
+        - on_clear_clicked(): void
+        --
+        + back(): signal
+        + logout(): signal
+    }
+
+    class setstatuswindow {
+        - ui: Ui::setstatuswindow*
+        --
+        + setstatuswindow(parent: QWidget*)
+        + ~setstatuswindow()
+        --
+        - on_back_clicked(): void
+        - on_logout_clicked(): void
+        - on_change_clicked(): void
+        - on_clear_clicked(): void
+        --
+        + back(): signal
+        + logout(): signal
+    }
+}
+
+' ===== 資料庫管理類別 =====
+package "Database Management" {
+    class DatabaseManager {
+        - db: QSqlDatabase
+        --
+        + DatabaseManager()
+        + connect(): bool
+        + createUSERTable(): void
+        + insertTestUserData(): void
+        + fetchUserData(account: QString): bool
+        + fetchPassword(account: QString, password: QString): int
+        + status(account: QString, index: int): void
+    }
+
+    class "users table" as users <<database table>> {
+        + id: INTEGER PRIMARY KEY
+        + account: TEXT UNIQUE
+        + password: TEXT
+        + status: INTEGER
+        + balance: REAL
+        + change_amount_1: REAL
+        + balance_1: REAL
+        + change_time_1: TEXT
+        + change_amount_2: REAL
+        + balance_2: REAL
+        + change_time_2: TEXT
+        + change_amount_3: REAL
+        + balance_3: REAL
+        + change_time_3: TEXT
+        + change_amount_4: REAL
+        + balance_4: REAL
+        + change_time_4: TEXT
+        + change_amount_5: REAL
+        + balance_5: REAL
+        + change_time_5: TEXT
+    }
+}
+
+' ===== Qt基礎類別 =====
+package "Qt Framework" {
+    class QObject <<Qt Framework>> {
+        + QObject(parent: QObject*)
+        + ~QObject()
+    }
+
+    class QMainWindow <<Qt Framework>> {
+        + QMainWindow(parent: QWidget*)
+        + ~QMainWindow()
+    }
+
+    class QSqlTableModel <<Qt Framework>> {
+        + QSqlTableModel(parent: QObject*)
+        + setTable(tableName: QString): void
+        + select(): bool
+    }
+
+    class QTimer <<Qt Framework>> {
+        + QTimer(parent: QObject*)
+        + start(msec: int): void
+        + stop(): void
+        --
+        + timeout(): signal
+    }
+}
+
+' ===== 繼承關係 =====
+QObject <|-- Controller
+QMainWindow <|-- loginWindow
+QMainWindow <|-- adminwindow
+QMainWindow <|-- acclistWindow
+QMainWindow <|-- addaccwindow
+QMainWindow <|-- setpasswordwindow
+QMainWindow <|-- setstatuswindow
+
+' ===== 組合關係 (Controller擁有所有視窗) =====
+Controller *-- loginWindow : "擁有"
+Controller *-- adminwindow : "擁有"
+Controller *-- acclistWindow : "擁有"
+Controller *-- addaccwindow : "擁有"
+Controller *-- setpasswordwindow : "擁有"
+Controller *-- setstatuswindow : "擁有"
+Controller *-- DatabaseManager : "擁有"
+Controller *-- QTimer : "擁有\n(sessionTimer)"
+
+' ===== 使用關係 (資料庫操作) =====
+acclistWindow --> QSqlTableModel : "使用"
+acclistWindow --> DatabaseManager : "查詢帳戶資料"
+addaccwindow --> DatabaseManager : "新增帳戶"
+setpasswordwindow --> DatabaseManager : "重設密碼"
+setstatuswindow --> DatabaseManager : "變更狀態"
+DatabaseManager --> users : "操作"
+
+' ===== 信號槽連接關係 (管理員功能流程) =====
+loginWindow -.-> Controller : "adminpress signal"
+adminwindow -.-> Controller : "logout signal"
+adminwindow -.-> Controller : "Accountlist signal"
+adminwindow -.-> Controller : "addaccountwindow signal"
+adminwindow -.-> Controller : "passwordsetting signal"
+adminwindow -.-> Controller : "statuschange signal"
+
+acclistWindow -.-> Controller : "back signal"
+acclistWindow -.-> Controller : "logout signal"
+
+addaccwindow -.-> Controller : "back signal"
+addaccwindow -.-> Controller : "logout signal"
+
+setpasswordwindow -.-> Controller : "back signal"
+setpasswordwindow -.-> Controller : "logout signal"
+
+setstatuswindow -.-> Controller : "back signal"
+setstatuswindow -.-> Controller : "logout signal"
+
+QTimer -.-> Controller : "timeout signal"
+
+' ===== 管理員認證狀態說明 =====
+note top of DatabaseManager
+  管理員認證狀態碼:
+  - 500: 管理員帳戶
+  - 501: 已認證管理員
+  - 0: 一般用戶
+  - 3: 帳戶鎖定
+  
+  密碼使用SHA-256加密
+end note
+
+note top of Controller
+  管理員會話管理:
+  - 90秒自動超時
+  - 靜態變數管理使用者狀態
+  - Qt信號槽機制協調視窗切換
+end note
+
+note bottom of adminwindow
+  管理員核心功能:
+  1. 帳戶列表查看
+  2. 新增帳戶
+  3. 重設密碼
+  4. 變更帳戶狀態
+  5. 登出
+end note
+
+@enduml

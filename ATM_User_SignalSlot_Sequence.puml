@@ -1,0 +1,192 @@
+@startuml ATM_User_SignalSlot_Sequence
+!theme plain
+
+title ATM System - User Signal-Slot Interaction Sequence Diagram
+note as N1
+  **ATM用戶功能信號槽互動序列圖**
+  展示普通用戶操作的完整信號槽連接流程
+  包含存款、提款、轉帳等主要交易操作的互動序列
+end note
+
+actor "用戶" as User
+participant "userwindow" as UW
+participant "Controller" as CTRL
+participant "depositWindow" as DW
+participant "withdrowWindow" as WW
+participant "TransWindow" as TW
+participant "summarywindow" as SW
+participant "DatabaseManager" as DB
+participant "SessionTimer" as TIMER
+database "ATM Database" as DBT
+
+== 用戶登入後進入主選單 ==
+
+User -> UW : 查看主選單
+UW -> UW : setWelcomeText(userName)
+CTRL -> TIMER : startSession()
+note right: 開始90秒會話計時
+
+== 存款操作流程 ==
+
+User -> UW : 點擊存款按鈕
+UW -> CTRL : emit deposit()
+CTRL -> CTRL : resetSessionTimer()
+CTRL -> DW : show()
+CTRL -> UW : hide()
+
+User -> DW : 輸入存款金額
+User -> DW : 點擊存款確認
+DW -> DW : on_deposit_btn_clicked()
+DW -> DW : 驗證金額有效性
+DW -> DB : connect()
+DW -> DBT : 查詢當前餘額
+DBT -> DW : 返回餘額
+DW -> DBT : 更新餘額和交易歷史
+note right: UPDATE users SET balance=?, \nchange_amount_1=?, balance_1=?, \nchange_time_1=? WHERE account=?
+DBT -> DW : 確認更新成功
+DW -> CTRL : Setbalance(newBalance)
+DW -> DW : refreshBalance()
+DW -> SW : emit showSummary("存款", amount, "", newBalance)
+
+CTRL -> SW : show()
+CTRL -> DW : hide()
+SW -> SW : setSummary(type, amount, target, balance)
+
+User -> SW : 查看交易摘要
+User -> SW : 點擊繼續操作
+SW -> CTRL : emit back()
+CTRL -> UW : show()
+CTRL -> SW : hide()
+CTRL -> TIMER : resetSessionTimer()
+
+== 提款操作流程 ==
+
+User -> UW : 點擊提款按鈕
+UW -> CTRL : emit withdraw()
+CTRL -> CTRL : resetSessionTimer()
+CTRL -> WW : show()
+CTRL -> UW : hide()
+
+User -> WW : 選擇快速金額或輸入金額
+alt 快速提款按鈕
+    User -> WW : 點擊快速金額(例如:f1000)
+    WW -> WW : on_f1000_clicked()
+    WW -> WW : ui->withdrow->setText("1000")
+else 自訂金額
+    User -> WW : 直接輸入金額
+end
+
+User -> WW : 點擊提款確認
+WW -> WW : on_withdraw_clicked()
+WW -> WW : 驗證金額和餘額
+WW -> DB : connect()
+WW -> DBT : 查詢當前餘額
+DBT -> WW : 返回餘額
+WW -> WW : 檢查餘額是否足夠
+alt 餘額足夠
+    WW -> DBT : 更新餘額和交易歷史
+    note right: 交易金額記錄為負數\n表示提款操作
+    DBT -> WW : 確認更新成功
+    WW -> CTRL : Setbalance(newBalance)
+    WW -> WW : refreshBalance()
+    WW -> SW : emit showSummary("提款", amount, "", newBalance)
+    
+    CTRL -> SW : show()
+    CTRL -> WW : hide()
+    SW -> SW : setSummary(type, amount, target, balance)
+else 餘額不足
+    WW -> User : 顯示餘額不足錯誤訊息
+end
+
+== 轉帳操作流程 ==
+
+User -> UW : 點擊轉帳按鈕
+UW -> CTRL : emit transfer()
+CTRL -> CTRL : resetSessionTimer()
+CTRL -> TW : show()
+CTRL -> UW : hide()
+
+User -> TW : 輸入目標帳戶
+User -> TW : 輸入轉帳金額
+User -> TW : 點擊轉帳確認
+TW -> TW : on_trans_btn_clicked()
+TW -> TW : 驗證輸入資料
+TW -> DB : connect()
+TW -> DBT : 開始資料庫交易 (BEGIN TRANSACTION)
+
+TW -> DBT : 驗證目標帳戶存在
+DBT -> TW : 返回驗證結果
+alt 目標帳戶存在
+    TW -> DBT : 查詢自己餘額
+    DBT -> TW : 返回餘額
+    TW -> TW : 檢查餘額是否足夠
+    alt 餘額足夠
+        TW -> DBT : 更新自己帳戶 (扣款)
+        TW -> DBT : 更新目標帳戶 (加款)
+        TW -> DBT : 提交交易 (COMMIT)
+        DBT -> TW : 確認交易成功
+        TW -> CTRL : Setbalance(newBalance)
+        TW -> TW : refreshBalance()
+        TW -> SW : emit showSummary("轉帳", amount, targetAccount, newBalance)
+        
+        CTRL -> SW : show()
+        CTRL -> TW : hide()
+        SW -> SW : setSummary(type, amount, target, balance)
+    else 餘額不足
+        TW -> DBT : 回滾交易 (ROLLBACK)
+        TW -> User : 顯示餘額不足錯誤
+    end
+else 目標帳戶不存在
+    TW -> DBT : 回滾交易 (ROLLBACK)
+    TW -> User : 顯示帳戶不存在錯誤
+end
+
+== 密碼變更操作 ==
+
+User -> UW : 點擊密碼變更
+UW -> CTRL : emit changepass()
+CTRL -> CTRL : resetSessionTimer()
+CTRL -> CTRL : showChangePasswordWindow()
+
+== 交易紀錄查詢 ==
+
+User -> UW : 點擊交易紀錄
+UW -> CTRL : emit transactionHistory()
+CTRL -> CTRL : resetSessionTimer()
+CTRL -> CTRL : showDocumentWindow()
+
+== 會話超時處理 ==
+
+TIMER -> TIMER : 90秒倒數完成
+TIMER -> CTRL : timeout信號
+CTRL -> CTRL : stopSession()
+CTRL -> CTRL : 關閉所有用戶窗口
+CTRL -> CTRL : 返回登入畫面
+
+== 用戶登出 ==
+
+User -> "Any Window" : 點擊登出按鈕
+"Any Window" -> CTRL : emit logout()
+CTRL -> TIMER : stopSession()
+CTRL -> CTRL : 清除用戶狀態
+CTRL -> CTRL : 關閉所有用戶窗口
+CTRL -> CTRL : 返回登入畫面
+
+note over User, DBT
+  **重要設計特點:**
+  • 所有操作都會重置會話計時器
+  • 交易操作使用資料庫交易確保原子性
+  • 5層交易歷史自動維護
+  • Signal/Slot機制確保鬆耦合
+  • 統一的錯誤處理和用戶反饋
+end note
+
+note over DB, DBT
+  **資料庫安全機制:**
+  • 參數化查詢防止SQL注入
+  • 交易歷史自動滾動更新
+  • 餘額變更即時追蹤
+  • 原子性交易操作
+end note
+
+@enduml

@@ -1,0 +1,338 @@
+/* ATM 系統 - 明亮科技版樣式表 (Qt 兼容版本) */
+
+/* 全局樣式 */
+QWidget {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #f8f9fa, stop: 1 #e9ecef);
+    font-family: "Microsoft YaHei UI";
+    color: #212529;
+}
+
+/* 主視窗樣式 */
+QMainWindow {
+    background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 1,
+                                 stop: 0 #667eea, stop: 1 #764ba2);
+}
+
+/* 標籤樣式 */
+QLabel {
+    font: bold 18pt "Microsoft YaHei UI";
+    color: #495057;
+    background-color: transparent;
+}
+
+/* 標題標籤特殊樣式 */
+QLabel[objectName*="title"], QLabel[objectName*="header"] {
+    font: bold 24pt "Microsoft YaHei UI";
+    color: #ffffff;
+    background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+                                 stop: 0 #667eea, stop: 1 #764ba2);
+    border-radius: 12px;
+    padding: 15px;
+    margin: 5px;
+}
+
+/* 按鈕樣式 */
+QPushButton {
+    font: bold 14pt "Microsoft YaHei UI";
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #ffffff, stop: 1 #f8f9fa);
+    border: 2px solid #007bff;
+    border-radius: 12px;
+    color: #007bff;
+    padding: 12px 20px;
+    min-height: 20px;
+}
+
+QPushButton:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #007bff, stop: 1 #0056b3);
+    color: white;
+    border: 2px solid #0056b3;
+}
+
+QPushButton:pressed {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #0056b3, stop: 1 #004085);
+}
+
+QPushButton:disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+    border: 2px solid #dee2e6;
+}
+
+/* 登出按鈕特殊樣式 */
+QPushButton[objectName*="logout"] {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #ff6b6b, stop: 1 #ee5a52);
+    border: 2px solid #dc3545;
+    color: white;
+}
+
+QPushButton[objectName*="logout"]:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #dc3545, stop: 1 #c82333);
+}
+
+/* 輸入框樣式 */
+QLineEdit {
+    font: 14pt "Microsoft YaHei UI";
+    background-color: #ffffff;
+    border: 2px solid #ced4da;
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: #495057;
+}
+
+QLineEdit:focus {
+    border: 2px solid #007bff;
+    background-color: #f8f9fa;
+}
+
+QLineEdit:disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+    border: 2px solid #dee2e6;
+}
+
+/* 密碼輸入框 */
+QLineEdit[echoMode="2"] {
+    border: 2px solid #28a745;
+}
+
+QLineEdit[echoMode="2"]:focus {
+    border: 2px solid #20c997;
+}
+
+/* 表格樣式 */
+QTableWidget {
+    background-color: #ffffff;
+    border: 2px solid #ced4da;
+    border-radius: 8px;
+    font: 12pt "Microsoft YaHei UI";
+}
+
+QTableWidget::item {
+    padding: 8px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+QTableWidget::item:selected {
+    background-color: #007bff;
+    color: white;
+}
+
+QHeaderView::section {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #495057, stop: 1 #343a40);
+    color: white;
+    padding: 10px;
+    border: none;
+    font: bold 13pt "Microsoft YaHei UI";
+}
+
+/* 狀態欄樣式 */
+QStatusBar {
+    background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+                                 stop: 0 #495057, stop: 1 #343a40);
+    color: white;
+    font: 11pt "Microsoft YaHei UI";
+    padding: 5px;
+}
+
+/* 訊息框樣式 */
+QMessageBox {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #ffffff, stop: 1 #f8f9fa);
+    border: 3px solid #007bff;
+    border-radius: 15px;
+    font: 14pt "Microsoft YaHei UI";
+    min-width: 400px;
+}
+
+QMessageBox QLabel {
+    font: 16pt "Microsoft YaHei UI";
+    color: #495057;
+    background-color: transparent;
+    padding: 20px;
+}
+
+QMessageBox QPushButton {
+    min-width: 100px;
+    min-height: 35px;
+    padding: 8px 15px;
+    font: bold 13pt "Microsoft YaHei UI";
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #007bff, stop: 1 #0056b3);
+    border: 2px solid #0056b3;
+    border-radius: 8px;
+    color: white;
+    margin: 5px;
+}
+
+QMessageBox QPushButton:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #0056b3, stop: 1 #004085);
+}
+
+/* 組合框樣式 */
+QComboBox {
+    font: 14pt "Microsoft YaHei UI";
+    background-color: #ffffff;
+    border: 2px solid #ced4da;
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: #495057;
+    min-height: 20px;
+}
+
+QComboBox:hover {
+    border: 2px solid #007bff;
+}
+
+QComboBox::drop-down {
+    border: none;
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #007bff, stop: 1 #0056b3);
+    border-radius: 6px;
+    margin: 2px;
+    width: 20px;
+}
+
+QComboBox QAbstractItemView {
+    background-color: #ffffff;
+    border: 2px solid #007bff;
+    border-radius: 8px;
+    font: 13pt "Microsoft YaHei UI";
+}
+
+/* 檢查框樣式 */
+QCheckBox {
+    font: 14pt "Microsoft YaHei UI";
+    color: #495057;
+}
+
+QCheckBox::indicator {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ced4da;
+    border-radius: 4px;
+    background-color: #ffffff;
+}
+
+QCheckBox::indicator:checked {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #28a745, stop: 1 #20c997);
+    border: 2px solid #20c997;
+}
+
+QCheckBox::indicator:checked:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #20c997, stop: 1 #17a2b8);
+}
+
+/* 滾動條樣式 */
+QScrollBar:vertical {
+    background-color: #f8f9fa;
+    width: 12px;
+    border-radius: 6px;
+    margin: 0;
+}
+
+QScrollBar::handle:vertical {
+    background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+                                 stop: 0 #007bff, stop: 1 #0056b3);
+    border-radius: 6px;
+    min-height: 20px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+                                 stop: 0 #0056b3, stop: 1 #004085);
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+
+/* 分組框樣式 */
+QGroupBox {
+    font: bold 16pt "Microsoft YaHei UI";
+    color: #495057;
+    border: 2px solid #ced4da;
+    border-radius: 10px;
+    margin: 10px 0;
+    padding-top: 20px;
+    background-color: rgba(255, 255, 255, 200);
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 15px;
+    padding: 5px 10px;
+    background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+                                 stop: 0 #007bff, stop: 1 #0056b3);
+    color: white;
+    border-radius: 8px;
+}
+
+/* 進度條樣式 */
+QProgressBar {
+    background-color: #e9ecef;
+    border: 2px solid #ced4da;
+    border-radius: 8px;
+    text-align: center;
+    font: bold 12pt "Microsoft YaHei UI";
+    color: #495057;
+}
+
+QProgressBar::chunk {
+    background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+                                 stop: 0 #007bff, stop: 1 #0056b3);
+    border-radius: 6px;
+    margin: 2px;
+}
+
+/* 分頁標籤樣式 */
+QTabWidget::pane {
+    border: 2px solid #ced4da;
+    border-radius: 8px;
+    background-color: #ffffff;
+}
+
+QTabBar::tab {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #f8f9fa, stop: 1 #e9ecef);
+    border: 2px solid #ced4da;
+    border-bottom: none;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    padding: 8px 15px;
+    margin: 2px;
+    font: 13pt "Microsoft YaHei UI";
+    color: #495057;
+}
+
+QTabBar::tab:selected {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #007bff, stop: 1 #0056b3);
+    color: white;
+    border-color: #007bff;
+}
+
+QTabBar::tab:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #e3f2fd, stop: 1 #bbdefb);
+}
+
+/* 工具提示樣式 */
+QToolTip {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #343a40, stop: 1 #495057);
+    color: white;
+    border: 2px solid #007bff;
+    border-radius: 8px;
+    padding: 8px;
+    font: 12pt "Microsoft YaHei UI";
+}
