@@ -188,14 +188,18 @@ sequenceDiagram
 
 ## 📄 授權協議
 
-本專案採用 MIT 授權協議 - 詳見 [LICENSE](LICENSE) 檔案
+本專案為**學術研究與教育用途**，採用 MIT 開源授權協議。
+- ✅ 允許自由使用、修改和分發
+- ✅ 適用於學習和研究目的
+- ⚠️ 使用時請保留原作者資訊
+- 📄 詳細條款請見 [LICENSE](LICENSE) 檔案
 
 ## 👨‍💻 開發者
 
-**專案開發者**: [您的姓名]
+**專案開發者**: [WU]
 - 🎓 **專長**: C++、Qt、資料庫設計、軟體架構
-- 📧 **聯絡**: your.email@example.com
-- 🔗 **GitHub**: [@yourusername](https://github.com/yourusername)
+- 📧 **聯絡**: B3230665@ulive.pccu.edu.tw
+- 🔗 **GitHub**: [@sheng5526cs](https://github.com/sheng5526cs)
 
 ---
 
