@@ -161,18 +161,7 @@ void loginWindow::setupUIEnhancements()
 // === 新增：輸入驗證增強 ===
 bool loginWindow::validateInput(const QString &account, const QString &password)
 {
-    // 帳號長度檢查
-    if (account.length() < 3) {
-        showEnhancedError("帳號長度不足", "Account must be at least 3 characters long!");
-        return false;
-    }
-    
-    // 密碼長度檢查
-    if (password.length() < 4) {
-        showEnhancedError("密碼長度不足", "Password must be at least 4 characters long!");
-        return false;
-    }
-    
+
     return true;
 }
 
